@@ -12,10 +12,6 @@ display_help() {
     exit 1
 }
    
-
-   #ingreso un comentario
-   
-
 emptyDirectory() { 
     echo "No se ha indicado el directorio para el $1";
     display_help;
@@ -101,6 +97,3 @@ echo "Nombre de archivo de salida: $outputFileName"
 echo "archivo_stopwords: $archivo_stopwords"
 echo "directorio_salida: $directorio_salida"
 echo "archivo_analizar: $archivo_analizar"
-
-#Verificando si anda el commit
-
