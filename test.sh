@@ -24,9 +24,6 @@ parametersError() {
     exit 0;
 }
 
- 
-
-
 callSintaxError() { 
     echo "Error de sintaxis en la llamada a la función. Cantidad minima de parametros requerida no cumplida"
     display_help;
