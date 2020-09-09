@@ -30,8 +30,6 @@ callSintaxError() {
     exit 0;
 }
 
-
-
 #Iniciamos con la validacion de cantidad y parseo de los argumentos recibidos.
     if [ "$1" == "-h" ] || [ "$1" == "-help" ]; then
                 display_help # Mostramos la ayuda sobre el call de la función.
@@ -100,5 +98,5 @@ echo "archivo_stopwords: $archivo_stopwords"
 echo "directorio_salida: $directorio_salida"
 echo "archivo_analizar: $archivo_analizar"
 
-
+#Verificando si anda el commit
 
