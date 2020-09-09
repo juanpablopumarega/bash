@@ -11,6 +11,10 @@ display_help() {
     echo
     exit 1
 }
+   
+
+   #ingreso un comentario
+   
 
 emptyDirectory() { 
     echo "No se ha indicado el directorio para el $1";
