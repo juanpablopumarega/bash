@@ -11,7 +11,9 @@ display_help() {
     echo
     exit 1
 }
-   
+
+
+
 emptyDirectory() { 
     echo "No se ha indicado el directorio para el $1";
     display_help;
