@@ -5,9 +5,9 @@ display_help() {
     echo
     echo "Usage: $0 [option...]"
     echo
-    echo "   -s,    Path absoluto o relativo del archivo con los stopwords. Required"
-    echo "   -o,    Path absoluto o relativo del directorio donde se generara el archivo de salida. Opcional. Si no se informa, se generaraá en el directoio de ejecución."
-    echo "   -i,    Path absoluto o relativo del archivo de texto a analizar"
+    echo "   -s,           Path absoluto o relativo del archivo con los stopwords. Required"
+    echo "   -o,           Path absoluto o relativo del directorio donde se generara el archivo de salida. Opcional. Si no se informa, se generaraá en el directoio de ejecución."
+    echo "   -i,           Path absoluto o relativo del archivo de texto a analizar"
     echo
     exit 1
 }
@@ -89,26 +89,16 @@ callSintaxError() {
     fi
 
 #Nombre del archivo de salida
-    timestamp=$(date +"%Y-%m-%d_%H:%M:%S")
-    outputFileName=$(echo frecuencias_$archivo_analizar_{$timestamp}.out)
+timestamp=$(date +"%Y-%m-%d_%H:%M:%S")
+outputFileName=$(echo frecuencias_$archivo_analizar_{$timestamp}.out)
 
-#Impresiones por pantalla de ayuda, borrar antes de entregar.
-    echo "" 
-    echo "  EJECUTANDO EL SCRIPT: $0"
-    echo ""
-    echo "  1 - Nombre de archivo de salida:    $outputFileName"
-    echo "  2 - Archivo de StopWords:           $archivo_stopwords"
-    echo "  3 - Directorio de Salida:           $directorio_salida"
-    echo "  4 - Archivo a Analizar:             $archivo_analizar"
-    echo ""
+#Impresiones por pantalla de ayuda
+echo "  1 - Nombre de archivo de salida:    $outputFileName"
+echo "  2 - Archivo de StopWords:           $archivo_stopwords"
+echo "  3 - Directorio de Salida:           $directorio_salida"
+echo "  4 - Archivo a Analizar:             $archivo_analizar"
 
-#Convertiendo a mayuscula el file de stopWords
-    archivoStopWordMayus=$(cat $archivo_stopwords | tr ‘[a-z]’ ‘[A-Z]’);
-    echo "Archivo stop words en mayuscula: $archivoStopWordMayus";
-    echo $archivoStopWordMayus > $archivo_stopwords;
 
-#Convertiendo a mayuscula el file a Analizar
-    archivoaAnalizarMayus=$(cat $archivo_analizar | tr ‘[a-z]’ ‘[A-Z]’);
-    echo "Archivo stop words en mayuscula: $archivoaAnalizarMayus";
-    echo $archivoaAnalizarMayus > $archivo_analizar;
-
+echo "Antes de ser modificado: $archivo_stopwords"; 
+echo $archivo_stopwords | tr ‘[a-z]’ ‘[A-Z]’ > $archivo_stopwords;
+echo "Despues de ser modificado: $archivo_stopwords";
