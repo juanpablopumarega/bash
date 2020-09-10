@@ -112,3 +112,11 @@ callSintaxError() {
     echo "Archivo stop words en mayuscula: $archivoaAnalizarMayus";
     echo $archivoaAnalizarMayus > $archivo_analizar;
 
+#Inicio el ciclo para eliminar las stop words.
+for word in $archivoStopWordMayus
+do
+    sed -i -e 's/'"$word"'//g' $archivo_analizar
+done
+
+#Eliminamos doble espacio resultante
+sed -i -e 's/  / /g' $archivo_analizar
