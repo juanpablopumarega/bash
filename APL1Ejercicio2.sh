@@ -86,6 +86,9 @@ callSintaxError() {
                     ;;
             esac
         done
+        if [ -z $directorio_salida ] ; then # Si no hay parametro -o, estara vacio directorio_salida, por ende se asigna el directorio actual
+             directorio_salida=$(echo $PWD);
+        fi
     fi
 # FIN DE VALIDACION DE PARAMETROS
 
@@ -114,10 +117,29 @@ callSintaxError() {
     echo $archivoaAnalizarMayus > $archivo_analizar;
 
 #Inicio el ciclo para eliminar las stop words.
-for word in $archivoStopWordMayus
-do
-    sed -i -e 's/'"$word"'//g' $archivo_analizar
-done
+    for word in $archivoStopWordMayus
+    do
+        sed -i -e 's/'"$word"'//g' $archivo_analizar
+    done
 
 #Eliminamos doble espacio resultante
-sed -i -e 's/  / /g' $archivo_analizar
+    sed -i -e 's/  / /g' $archivo_analizar
+
+# Primero llenemos un array con las palabras del archivo.
+    declare -A array
+
+    for word in $archivoaAnalizarMayus
+    do
+        if [[ ! -z ${array[$word]} ]] ; then
+            array[$word]=$(( ${array[$word]} + 1 ))
+        else
+            array[$word]=1;
+        fi
+    done
+
+    echo ""
+
+    for i in "${!array[@]}" 
+    do 
+        echo "key : $i,${array[$i]}"
+    done
