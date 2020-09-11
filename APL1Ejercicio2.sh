@@ -116,14 +116,17 @@ callSintaxError() {
     echo "Archivo stop words en mayuscula: $archivoaAnalizarMayus";
     echo $archivoaAnalizarMayus > $archivo_analizar;
 
-#Inicio el ciclo para eliminar las stop words.
-    for word in $archivoStopWordMayus
+##Doble for para leer por linea y luego por palabra a eliminar.
+for linea in $archivoStopWordMayus
+do
+    for word in $linea
     do
         sed -i -e 's/'"$word"'//g' $archivo_analizar
     done
+done
 
 #Eliminamos doble espacio resultante
-    sed -i -e 's/  / /g' $archivo_analizar
+sed -i -e 's/  / /g' $archivo_analizar
 
 # Primero llenemos un array con las palabras del archivo.
     declare -A array
@@ -148,7 +151,7 @@ callSintaxError() {
 
     echo ""
     chmod +r $directorio_salida/$outputFileName
-    cat $directorio_salida/$outputFileName | sort -k 2 -r | head -5
+    cat $directorio_salida/$outputFileName | sort -k 2 -r
 
 
 #Comando sacado de internet que ordena y cuenta pero la salida tiene que ser una linea debajo de otra
