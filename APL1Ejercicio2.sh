@@ -141,5 +141,15 @@ callSintaxError() {
 
     for i in "${!array[@]}" 
     do 
-        echo "key : $i,${array[$i]}"
+        echo "$i ${array[$i]}" >> $directorio_salida/$outputFileName
     done
+
+    IFS=",";
+
+    echo ""
+    chmod +r $directorio_salida/$outputFileName
+    cat $directorio_salida/$outputFileName | sort -k 2 -r | head -5
+
+
+#Comando sacado de internet que ordena y cuenta pero la salida tiene que ser una linea debajo de otra
+#sort -bdf $archivo_analizar | uniq -ic | sort -nr
