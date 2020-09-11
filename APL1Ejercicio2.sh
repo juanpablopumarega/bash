@@ -117,16 +117,16 @@ callSintaxError() {
     echo $archivoaAnalizarMayus > $archivo_analizar;
 
 ##Doble for para leer por linea y luego por palabra a eliminar.
-for linea in $archivoStopWordMayus
-do
-    for word in $linea
+    for linea in $archivoStopWordMayus
     do
-        sed -i -e 's/'"$word"'//g' $archivo_analizar
+        for word in $linea
+        do
+            sed -i -e 's/'"$word"'//g' $archivo_analizar
+        done
     done
-done
 
 #Eliminamos doble espacio resultante
-sed -i -e 's/  / /g' $archivo_analizar
+    sed -i -e 's/  / /g' $archivo_analizar
 
 # Primero llenemos un array con las palabras del archivo.
     declare -A array
