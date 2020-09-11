@@ -107,18 +107,18 @@ callSintaxError() {
     echo "  4 - Archivo a Analizar:             "$archivo_analizar""
     echo ""
 
-#Convertiendo a mayuscula el file de stopWords
-    archivoStopWordMayus=$(cat "$archivo_stopwords" | tr ‘[a-z]’ ‘[A-Z]’);
-    echo "Archivo stop words en mayuscula: $archivoStopWordMayus";
-    echo $archivoStopWordMayus > "$archivo_stopwords";
-
-#Convertiendo a mayuscula el file a Analizar
-    archivoaAnalizarMayus=$(cat "$archivo_analizar" | tr ‘[a-z]’ ‘[A-Z]’);
-    echo "Archivo stop words en mayuscula: $archivoaAnalizarMayus";
-    echo $archivoaAnalizarMayus > "$archivo_analizar";
+##Convertiendo a mayuscula el file de stopWords
+#    archivoStopWordMayus=$(cat "$archivo_stopwords" | tr ‘[a-z]’ ‘[A-Z]’);
+#    echo "Archivo stop words en mayuscula: $archivoStopWordMayus";
+#    echo $archivoStopWordMayus > "$archivo_stopwords";
+#
+##Convertiendo a mayuscula el file a Analizar
+#    archivoaAnalizarMayus=$(cat "$archivo_analizar" | tr ‘[a-z]’ ‘[A-Z]’);
+#    echo "Archivo stop words en mayuscula: $archivoaAnalizarMayus";
+#    echo $archivoaAnalizarMayus > "$archivo_analizar";
 
 ##Doble for para leer por linea y luego por palabra a eliminar.
-    for linea in $archivoStopWordMayus
+    for linea in $(cat "$archivo_stopwords" | tr ‘[a-z]’ ‘[A-Z]’)
     do
         for word in $linea
         do
@@ -126,13 +126,13 @@ callSintaxError() {
         done
     done
 
-#Eliminamos doble espacio resultante
-    sed -i -e 's/  / /g' "$archivo_analizar"
+#Eliminamos doble espacio, puntos, comas, guines, signos de admiración y exclamación resultante
+    sed -i -e 's/  / /; s/\,//; s/\.//; s/\-//; s/\?//; s/\!//' "$archivo_analizar"
 
-# Primero llenemos un array con las palabras del archivo.
+#Llenamos un array asociativo con las palabras del archivo y contamos la ocurrencia de cada una.
     declare -A array
 
-    for word in $archivoaAnalizarMayus
+    for word in $(cat "$archivo_analizar" | tr ‘[a-z]’ ‘[A-Z]’)
     do
         if [[ ! -z ${array[$word]} ]] ; then
             array[$word]=$(( ${array[$word]} + 1 ))
@@ -148,11 +148,11 @@ callSintaxError() {
         echo "$i ${array[$i]}" >> "$directorio_salida/$outputFileName"
     done
 
-    IFS=",";
+    IFS=',';
 
     echo ""
     chmod +r "$directorio_salida/$outputFileName"
-    cat "$directorio_salida/$outputFileName" | sort -k 2 -r
+    cat "$directorio_salida/$outputFileName" | sort -k 2 -r | head -5
 
 
 #Comando sacado de internet que ordena y cuenta pero la salida tiene que ser una linea debajo de otra
