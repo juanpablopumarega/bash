@@ -93,9 +93,7 @@ callSintaxError() {
 # FIN DE VALIDACION DE PARAMETROS
 
 #Nombre del archivo de salida
-    timestamp=$(date +"%Y-%m-%d_%H:%M:%S")
-    outputFile=$(basename $archivo_analizar)
-    outputFileName=$(echo frecuencias_"$outputFile"_{$timestamp}.out)
+    outputFileName=$(echo frecuencias_$(basename "$archivo_analizar")_{$(date +"%Y-%m-%d_%H:%M:%S")}.out)
 
 #Impresiones por pantalla de ayuda, borrar antes de entregar.
     echo "" 
@@ -106,16 +104,6 @@ callSintaxError() {
     echo "  3 - Directorio de Salida:           "$directorio_salida""
     echo "  4 - Archivo a Analizar:             "$archivo_analizar""
     echo ""
-
-##Convertiendo a mayuscula el file de stopWords
-#    archivoStopWordMayus=$(cat "$archivo_stopwords" | tr ‘[a-z]’ ‘[A-Z]’);
-#    echo "Archivo stop words en mayuscula: $archivoStopWordMayus";
-#    echo $archivoStopWordMayus > "$archivo_stopwords";
-#
-##Convertiendo a mayuscula el file a Analizar
-#    archivoaAnalizarMayus=$(cat "$archivo_analizar" | tr ‘[a-z]’ ‘[A-Z]’);
-#    echo "Archivo stop words en mayuscula: $archivoaAnalizarMayus";
-#    echo $archivoaAnalizarMayus > "$archivo_analizar";
 
 ##Doble for para leer por linea y luego por palabra a eliminar.
     for linea in $(cat "$archivo_stopwords" | tr ‘[a-z]’ ‘[A-Z]’)
@@ -141,19 +129,12 @@ callSintaxError() {
         fi
     done
 
-    echo ""
-
     for i in "${!array[@]}" 
     do 
-        echo "$i ${array[$i]}" >> "$directorio_salida/$outputFileName"
+        echo "$i,${array[$i]}" >> "$directorio_salida/$outputFileName"
     done
 
-    IFS=',';
-
-    echo ""
     chmod +r "$directorio_salida/$outputFileName"
-    cat "$directorio_salida/$outputFileName" | sort -k 2 -r | head -5
+    cat "$directorio_salida/$outputFileName" | sort -t"," -k2nr | head -5
 
-
-#Comando sacado de internet que ordena y cuenta pero la salida tiene que ser una linea debajo de otra
-#sort -bdf $archivo_analizar | uniq -ic | sort -nr
+#FIN
