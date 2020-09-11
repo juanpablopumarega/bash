@@ -41,43 +41,43 @@ callSintaxError() {
 
         while [[ $# > 0 ]] # Itero sobre la cantidad de parametros que se ingresaron.
         do
-            case $1 in
+            case "$1" in
                 -s) # Hacemos los parametros se desplacen una posición para atras, ej: $2 pasa a ser $1.
                     shift 
                         # Validación del parametro -s (Obligatorio y válido)
-                        if [ -z $1 ] ; then
+                        if [ -z "$1" ] ; then
                                 emptyDirectory "Archivo de Stop Wordssssss (-s)";
                         elif
-                            [ ! -r $1 ] ; then
-                                parametersError $1;
+                            [ ! -r "$1" ] ; then
+                                parametersError "$1";
                             else
-                                archivo_stopwords=$1; # Asigno la variable correspondiente ya que paso las validaciones.
+                                archivo_stopwords="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
                         fi
                     shift 
                     ;;
                 -o)
                     shift
                         # Validación del parametro -o (Opcional pero válido, no informa que se cree si no exista, revisar esa opción)
-                        if [ -z $1 ] ; then
+                        if [ -z "$1" ] ; then
                             directorio_salida=$(echo $PWD);
                         elif
-                            [ ! -r $1 ] ; then
-                                parametersError $1;
+                            [ ! -r "$1" ] ; then
+                                parametersError "$1";
                         else 
-                            directorio_salida=$1; # Asigno la variable correspondiente ya que paso las validaciones.
+                            directorio_salida="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
                         fi
                     shift 
                     ;;
                 -i)
                     shift
                         # Validación del parametro -i (Obligatorio y válido)
-                        if [ -z $1 ] ; then
+                        if [ -z "$1" ] ; then
                             emptyDirectory "Archivo a Analizar (-i)";
                         elif
-                            [ ! -r $1 ] ; then
-                                parametersError $1;
+                            [ ! -r "$1" ] ; then
+                                parametersError "$1";
                         else
-                            archivo_analizar=$1; # Asigno la variable correspondiente ya que paso las validaciones.
+                            archivo_analizar="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
                         fi
                     shift 
                     ;;
@@ -86,7 +86,7 @@ callSintaxError() {
                     ;;
             esac
         done
-        if [ -z $directorio_salida ] ; then # Si no hay parametro -o, estara vacio directorio_salida, por ende se asigna el directorio actual
+        if [ -z "$directorio_salida" ] ; then # Si no hay parametro -o, estara vacio directorio_salida, por ende se asigna el directorio actual
              directorio_salida=$(echo $PWD);
         fi
     fi
@@ -94,39 +94,40 @@ callSintaxError() {
 
 #Nombre del archivo de salida
     timestamp=$(date +"%Y-%m-%d_%H:%M:%S")
-    outputFileName=$(echo frecuencias_$archivo_analizar_{$timestamp}.out)
+    outputFile=$(basename $archivo_analizar)
+    outputFileName=$(echo frecuencias_"$outputFile"_{$timestamp}.out)
 
 #Impresiones por pantalla de ayuda, borrar antes de entregar.
     echo "" 
     echo "  EJECUTANDO EL SCRIPT: $0"
     echo ""
-    echo "  1 - Nombre de archivo de salida:    $outputFileName"
-    echo "  2 - Archivo de StopWords:           $archivo_stopwords"
-    echo "  3 - Directorio de Salida:           $directorio_salida"
-    echo "  4 - Archivo a Analizar:             $archivo_analizar"
+    echo "  1 - Nombre de archivo de salida:    "$outputFileName""
+    echo "  2 - Archivo de StopWords:           "$archivo_stopwords""
+    echo "  3 - Directorio de Salida:           "$directorio_salida""
+    echo "  4 - Archivo a Analizar:             "$archivo_analizar""
     echo ""
 
 #Convertiendo a mayuscula el file de stopWords
-    archivoStopWordMayus=$(cat $archivo_stopwords | tr ‘[a-z]’ ‘[A-Z]’);
+    archivoStopWordMayus=$(cat "$archivo_stopwords" | tr ‘[a-z]’ ‘[A-Z]’);
     echo "Archivo stop words en mayuscula: $archivoStopWordMayus";
-    echo $archivoStopWordMayus > $archivo_stopwords;
+    echo $archivoStopWordMayus > "$archivo_stopwords";
 
 #Convertiendo a mayuscula el file a Analizar
-    archivoaAnalizarMayus=$(cat $archivo_analizar | tr ‘[a-z]’ ‘[A-Z]’);
+    archivoaAnalizarMayus=$(cat "$archivo_analizar" | tr ‘[a-z]’ ‘[A-Z]’);
     echo "Archivo stop words en mayuscula: $archivoaAnalizarMayus";
-    echo $archivoaAnalizarMayus > $archivo_analizar;
+    echo $archivoaAnalizarMayus > "$archivo_analizar";
 
 ##Doble for para leer por linea y luego por palabra a eliminar.
     for linea in $archivoStopWordMayus
     do
         for word in $linea
         do
-            sed -i -e 's/'"$word"'//g' $archivo_analizar
+            sed -i -e 's/'"$word"'//g' "$archivo_analizar"
         done
     done
 
 #Eliminamos doble espacio resultante
-    sed -i -e 's/  / /g' $archivo_analizar
+    sed -i -e 's/  / /g' "$archivo_analizar"
 
 # Primero llenemos un array con las palabras del archivo.
     declare -A array
@@ -144,14 +145,14 @@ callSintaxError() {
 
     for i in "${!array[@]}" 
     do 
-        echo "$i ${array[$i]}" >> $directorio_salida/$outputFileName
+        echo "$i ${array[$i]}" >> "$directorio_salida/$outputFileName"
     done
 
     IFS=",";
 
     echo ""
-    chmod +r $directorio_salida/$outputFileName
-    cat $directorio_salida/$outputFileName | sort -k 2 -r
+    chmod +r "$directorio_salida/$outputFileName"
+    cat "$directorio_salida/$outputFileName" | sort -k 2 -r
 
 
 #Comando sacado de internet que ordena y cuenta pero la salida tiene que ser una linea debajo de otra
