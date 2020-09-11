@@ -105,12 +105,12 @@ callSintaxError() {
     echo "  4 - Archivo a Analizar:             "$archivo_analizar""
     echo ""
 
-##Doble for para leer por linea y luego por palabra a eliminar.
+#Doble for para leer por linea y luego por palabra a eliminar.
     for linea in $(cat "$archivo_stopwords" | tr ‘[a-z]’ ‘[A-Z]’)
     do
         for word in $linea
         do
-            sed -i -e 's/'"$word"'//g' "$archivo_analizar"
+            sed -i -e 's/'"$word"'//g' "$archivo_analizar" #reemplazo la palabra de Stop Words por nada en el archivo analizado.
         done
     done
 
@@ -129,11 +129,13 @@ callSintaxError() {
         fi
     done
 
+#Escribo el archvio de salida leyendo el array
     for i in "${!array[@]}" 
     do 
         echo "$i,${array[$i]}" >> "$directorio_salida/$outputFileName"
     done
 
+#Otorgo permisos de ejecución y realizo el sort sobre los 5 ma repetidos (-t indica separador, -k2 indica segunda columna, -nr orden numerico y de descendente)
     chmod +r "$directorio_salida/$outputFileName"
     cat "$directorio_salida/$outputFileName" | sort -t"," -k2nr | head -5
 
