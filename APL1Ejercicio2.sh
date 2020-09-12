@@ -5,9 +5,9 @@ display_help() {
     echo
     echo "Usage: $0 [option...]"
     echo
-    echo "   -s,    Path absoluto o relativo del archivo con los stopwords. Required"
-    echo "   -o,    Path absoluto o relativo del directorio donde se generara el archivo de salida. Opcional. Si no se informa, se generaraá en el directoio de ejecución."
-    echo "   -i,    Path absoluto o relativo del archivo de texto a analizar"
+    echo "   -s,    [Required] Path absoluto o relativo del archivo con los stopwords. "
+    echo "   -o,    [Optional]  Path absoluto o relativo del directorio donde se generara el archivo de salida. Opcional. Si no se informa, se generaraá en el directoio de ejecución."
+    echo "   -i,    [Required]  Path absoluto o relativo del archivo de texto a analizar"
     echo
     exit 1
 }
@@ -93,7 +93,7 @@ callSintaxError() {
 # FIN DE VALIDACION DE PARAMETROS
 
 #Nombre del archivo de salida
-    outputFileName=$(echo frecuencias_$(basename "$archivo_analizar")_{$(date +"%Y-%m-%d_%H:%M:%S")}.out)
+    outputFileName=$(echo frecuencias_$(basename "$archivo_analizar")_$(date +"%Y-%m-%d_%H:%M:%S").out)
 
 #Impresiones por pantalla de ayuda, borrar antes de entregar.
     echo "" 
