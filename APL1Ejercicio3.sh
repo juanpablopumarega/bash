@@ -89,6 +89,13 @@ callSintaxError() {
     fi
 # FIN DE VALIDACION DE PARAMETROS
 
+
+#Calculamos el umbral si no existe
+    if [ -z $umbral ] || [[ $umbral == "-1" ]] ; then
+        echo "Entro?"
+        umbral=$(find $directorioDeAnalisis -type f -ls | awk '{sum += $7; n++;} END {print sum/n;}');
+    fi
+
 #Nombre del archivo de salida
     outputFileName=$(echo resultado_$(date +"%Y-%m-%d_%H:%M:%S").out)
 
@@ -101,9 +108,6 @@ callSintaxError() {
     echo "  3 - Directorio de Salida:           "$directorioSalida""
     echo "  4 - Umbral:                         "$umbral""
     echo ""
-
-
-
 
 
 
