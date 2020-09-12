@@ -115,7 +115,11 @@ callSintaxError() {
     done
 
 #Eliminamos doble espacio, puntos, comas, guines, signos de admiración y exclamación resultante
-    sed -i -e 's/  / /; s/\,//; s/\.//; s/\-//; s/\?//; s/\!//' "$archivo_analizar"
+    #sed -i -e 's/  / /; s/\,//; s/\.//; s/\-//; s/\?//; s/\!//' "$archivo_analizar"
+#Este cambio es para que tenga en cuenta todos los signos de puntuacion. 
+    sed -i -e 's/[[:punct:]]/ /g' "$archivo_analizar"
+#Y luego de ahi eliminar los posibles esapcios dobles
+    sed -i -e 's/  / /g' "$archivo_analizar" #la g al final es para que tome todos? 
 
 #Llenamos un array asociativo con las palabras del archivo y contamos la ocurrencia de cada una.
     declare -A array
