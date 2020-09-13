@@ -93,7 +93,7 @@ callSintaxError() {
 #Calculamos el umbral si no existe
     if [ -z $umbral ] || [[ $umbral == "-1" ]] ; then
         echo "Entro?"
-        umbral=$(find $directorioDeAnalisis -type f -ls | awk '{sum += $7; n++;} END {print sum/n;}');
+        umbral=$(find $directorioDeAnalisis -type f -ls | awk '{sum += $7; n++;} END {print int(sum/n);}');
     fi
 
 #Nombre del archivo de salida
@@ -109,7 +109,9 @@ callSintaxError() {
     echo "  4 - Umbral:                         "$umbral""
     echo ""
 
+echo "Mostrando files que superan el umbral: $umbral    [ SIZE | FILE ]"
 
+echo "$(find $directorioDeAnalisis -type f -name "*" -size +"$umbral"c -ls | awk '{print $7,$11}' | sort -r)"
 
 
 #FIN
