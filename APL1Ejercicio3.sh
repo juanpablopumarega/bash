@@ -89,7 +89,6 @@ callSintaxError() {
     fi
 # FIN DE VALIDACION DE PARAMETROS
 
-
 #Calculamos el umbral si no existe
     if [ -z $umbral ] || [[ $umbral == "-1" ]] ; then
         echo "Entro?"
@@ -109,9 +108,50 @@ callSintaxError() {
     echo "  4 - Umbral:                         "$umbral""
     echo ""
 
-echo "Mostrando files que superan el umbral: $umbral    [ SIZE | FILE ]"
+#Inicio el ciclo para detectar archivos duplicados
+    declare -A array
 
-echo "$(find $directorioDeAnalisis -type f -name "*" -size +"$umbral"c -ls | awk '{print $7,$11}' | sort -r)"
+    #Genero un file temporal donde obtengo el listado de todos los files del directorio a analizar
+    filePivote="/tmp/APL1Ejercicio3_pivote.dat"
+    find $directorioDeAnalisis -type f -name "*" -ls | awk '{print$11}' > $filePivote
 
+    #cat $filePivote;
+    echo ""
+
+    for linea in $(cat $filePivote)
+    do
+        fileName=$(basename "$linea"); #Obtengo el nombre del file
+        if [[ ! -z ${array[$fileName]} ]] ; then
+            array[$fileName]=1; #Si esta duplicado lo marcamos con el flag 1.
+        else
+            array[$fileName]=0; #No dulicado flag 0.
+        fi
+    done
+
+    #echo "Intentando mostrar el array"
+    #for key in "${!array[@]}"; do echo "$key => ${array[$key]}"; done
+
+# Muestro el nombre del file duplicado y realizo un find para obtener los detalles del mismo.
+    echo "ARCHIVO DUPLICADOS" >> $directorioSalida/$outputFileName;
+    
+    for key in "${!array[@]}"; 
+    do 
+        if [[ ${array[$key]} == 1 ]] ; then
+            echo "Filename: $key" >> $directorioSalida/$outputFileName;
+            find $directorioDeAnalisis -name $key -type f -ls | awk '{print$10,$11}' >> $directorioSalida/$outputFileName;
+        fi
+    done   
+
+#Muestro los files que superen el umbral.
+    echo "" >> $directorioSalida/$outputFileName;
+    echo "ARCHIVOS QUE SUPEREN EL UMBRAL: $umbral    [ SIZE | FILE ]" >> $directorioSalida/$outputFileName;
+    echo "$(find $directorioDeAnalisis -type f -name "*" -size +"$umbral"c -ls | awk '{print $7,$11}' | sort -r)" >> $directorioSalida/$outputFileName;
+    echo ""
+
+# Muestro por pantalla el file resultante
+    cat $directorioSalida/$outputFileName;
+
+# Elimino el file pivote
+    rm $filePivote;
 
 #FIN
