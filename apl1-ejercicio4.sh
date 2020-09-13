@@ -95,22 +95,14 @@ echo ""
     
     for i in "${!blackproc[@]}" 
     do 
-        proceso_encontrado=`ps aux|grep $i| grep -v "grep" -c`
+        proceso_encontrado=$(ps aux|grep ${blackproc[i]}| grep -v "grep" -c)
         if [ $proceso_encontrado -gt 0 ]
         then
-            echo $proceso_encontrado
-            #echo `date +"%Y-%m-%d_%H:%M:%S"` `ps aux | grep $1 |awk '{print $1,$2}'` >> "$directorioSalida/logfile.log"
+            fecha="$(date +"%Y-%m-%d_%H:%M:%S")"
+            killed_pids="$(ps aux | grep ${blackproc[i]} | grep -v "grep" | awk '{print $1,$2,$11}')"
+            echo $fecha $killed_pids >> "$directorioSalida/logfile.log" 
+
+            killall $killed_pids 2> /dev/null #para que no se vea en la terminal la salida de la pantalla.
+
         fi    
     done
-    
-#Variante 1 para matar procesos encontrados en una lista de palabras   
-#    for i in `ps aux | egrep "firefox|chrome|selenium|opera"|grep "/home/dir1/dir2"|awk '{print $2}'|uniq`; do kill $i; done
-#Variante 2 para matar procesos que se encontraron con ps
-#   cnt=`ps aux|grep $1| grep -v "grep" -c`
-#   if [ "$cnt" -gt 0 ]
-#   then
-#       echo "Found $cnt processes - killing them"
-#       ps aux|grep $1| grep -v "grep"| awk '{print $2}'| xargs kill
-#   else
-#       echo "No processes found"
-#   fi
