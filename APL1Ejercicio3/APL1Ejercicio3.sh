@@ -131,9 +131,6 @@ callSintaxError() {
         fi
     done
 
-    #echo "Intentando mostrar el array"
-    #for key in "${!array[@]}"; do echo "$key => ${array[$key]}"; done
-
 # Muestro el nombre del file duplicado y realizo un find para obtener los detalles del mismo.
     echo "ARCHIVO DUPLICADOS" >> $directorioSalida/$outputFileName;
     
