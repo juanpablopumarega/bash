@@ -139,7 +139,6 @@ callSintaxError() {
         fi
     done
 
-
 #Escribo el archvio de salida leyendo el array
     for i in "${!array[@]}" 
     do 
