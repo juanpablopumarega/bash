@@ -35,17 +35,12 @@ callSintaxError() {
                 display_help # Mostramos la ayuda sobre el call de la función.
     else
 
-        if [ $# -lt 2 ] ; then # Verifico si no cumple la cantidad minima de parametros requeridos
+        if [ $# -lt 4 ] || [ $# -gt 6 ]; then # Verifico si no cumple la cantidad minima de parametros requeridos
             callSintaxError
         fi
 
         while [[ $# > 0 ]] # Itero sobre la cantidad de parametros que se ingresaron.
         do
-
-            if [[ "$1" != "-d" ]] && [[ "$1" != "-o" ]] && [[ "$1" != "-u" ]]; then
-                callSintaxError;
-            fi
-
             case "$1" in
                 -d) # Hacemos los parametros se desplacen una posición para atras, ej: $2 pasa a ser $1.
                     shift 
@@ -83,7 +78,8 @@ callSintaxError() {
                         fi
                     shift 
                     ;;
-                *)
+                *)  
+                    callSintaxError;
                     shift 
                     ;;
             esac
