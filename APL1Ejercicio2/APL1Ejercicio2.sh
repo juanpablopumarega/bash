@@ -41,6 +41,11 @@ callSintaxError() {
 
         while [[ $# > 0 ]] # Itero sobre la cantidad de parametros que se ingresaron.
         do
+        
+            if [[ "$1" != "-s" ]] || [[ "$1" != "-i" ]]; then
+                callSintaxError;
+            fi
+
             case "$1" in
                 -s) # Hacemos los parametros se desplacen una posición para atras, ej: $2 pasa a ser $1.
                     shift 
