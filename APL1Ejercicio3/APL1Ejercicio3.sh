@@ -41,6 +41,11 @@ callSintaxError() {
 
         while [[ $# > 0 ]] # Itero sobre la cantidad de parametros que se ingresaron.
         do
+
+            if [[ "$1" != "-d" ]] && [[ "$1" != "-o" ]] && [[ "$1" != "-u" ]]; then
+                callSintaxError;
+            fi
+
             case "$1" in
                 -d) # Hacemos los parametros se desplacen una posición para atras, ej: $2 pasa a ser $1.
                     shift 
@@ -91,11 +96,10 @@ callSintaxError() {
 
 #Calculamos el umbral si no existe
     if [ -z $umbral ] || [[ $umbral == "-1" ]] ; then
-        echo "Entro?"
         umbral=$(find $directorioDeAnalisis -type f -ls | awk '{sum += $7; n++;} END {print int(sum/n);}');
     fi
 
-#Nombre del archivo de salida
+#Nombre del archivo de salidaq
     outputFileName=$(echo resultado_$(date +"%Y-%m-%d_%H:%M:%S").out)
 
 #Impresiones por pantalla de ayuda, borrar antes de entregar.
@@ -115,7 +119,6 @@ callSintaxError() {
     filePivote="/tmp/APL1Ejercicio3_pivote.dat"
     find $directorioDeAnalisis -type f -name "*" -ls | awk '{print$11}' > $filePivote
 
-    #cat $filePivote;
     echo ""
 
     for linea in $(cat $filePivote)

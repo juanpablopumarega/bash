@@ -41,11 +41,6 @@ callSintaxError() {
 
         while [[ $# > 0 ]] # Itero sobre la cantidad de parametros que se ingresaron.
         do
-        
-            if [[ "$1" != "-s" ]] && [[ "$1" != "-i" ]] && [[ "$1" != "-o" ]]; then
-                callSintaxError;
-            fi
-
             case "$1" in
                 -s) # Hacemos los parametros se desplacen una posición para atras, ej: $2 pasa a ser $1.
                     shift 
@@ -110,27 +105,26 @@ callSintaxError() {
     echo "  4 - Archivo a Analizar:             "$archivo_analizar""
     echo ""
 
-    cat "$archivo_analizar" | tr ‘[a-z]’ ‘[A-Z]’ > $archivo_analizar.mayus;
-
 #Doble for para leer por linea y luego por palabra a eliminar.
     for linea in $(cat "$archivo_stopwords" | tr ‘[a-z]’ ‘[A-Z]’)
     do
         for word in $linea
         do
-            sed -i -e 's/\b'"$word"'\b//g' "$archivo_analizar.mayus" #reemplazo la palabra de Stop Words por nada en el archivo analizado.
+            sed -i -e 's/'"$word"'//g' "$archivo_analizar" #reemplazo la palabra de Stop Words por nada en el archivo analizado.
         done
     done
 
+#Eliminamos doble espacio, puntos, comas, guines, signos de admiración y exclamación resultante
+    #sed -i -e 's/  / /; s/\,//; s/\.//; s/\-//; s/\?//; s/\!//' "$archivo_analizar"
 #Este cambio es para que tenga en cuenta todos los signos de puntuacion. 
-    sed -i -e 's/[[:punct:]]/ /g' "$archivo_analizar.mayus";
-
+    sed -i -e 's/[[:punct:]]/ /g' "$archivo_analizar"
 #Y luego de ahi eliminar los posibles esapcios dobles
-    sed -i -e 's/  / /g' "$archivo_analizar.mayus" #la g al final es para que tome todos? 
+    sed -i -e 's/  / /g' "$archivo_analizar" #la g al final es para que tome todos? 
 
 #Llenamos un array asociativo con las palabras del archivo y contamos la ocurrencia de cada una.
     declare -A array
 
-    for word in $(cat "$archivo_analizar.mayus" | tr ‘[a-z]’ ‘[A-Z]’)
+    for word in $(cat "$archivo_analizar" | tr ‘[a-z]’ ‘[A-Z]’)
     do
         if [[ ! -z ${array[$word]} ]] ; then
             array[$word]=$(( ${array[$word]} + 1 ))
