@@ -34,7 +34,7 @@ callSintaxError() {
                 display_help # Mostramos la ayuda sobre el call de la función.
     else
 
-        if [ $# -lt 2 ] ; then # Verifico si no cumple la cantidad minima de parametros requeridos
+        if [ $# -lt 2 ] || [ $# -gt 4 ]; then # Verifico si no cumple la cantidad minima de parametros requeridos
             callSintaxError
         fi
 
@@ -68,6 +68,7 @@ callSintaxError() {
                     shift 
                     ;;
                 *)
+                    callSintaxError;
                     shift 
                     ;;
             esac
