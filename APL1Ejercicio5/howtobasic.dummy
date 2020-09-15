@@ -1,0 +1,1 @@
+./APL1Ejercicio5.sh --aria ./files/fileArias.txt --tags ./files/fileTags.txt --web ./files/fileHTML.txt --out ./files/
