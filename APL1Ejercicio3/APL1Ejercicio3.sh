@@ -96,7 +96,7 @@ callSintaxError() {
 
 #Calculamos el umbral si no existe
     if [ -z $umbral ] || [[ $umbral == "-1" ]] ; then
-        umbral=$(find $directorioDeAnalisis -type f -ls | awk '{sum += $7; n++;} END {print int(sum/n);}');
+        umbral=$(find $directorioDeAnalisis -type f -ls | awk '{sum += $7; n++;} END {print int((sum/n)/1024);}');
     fi
 
 #Nombre del archivo de salidaq
@@ -109,7 +109,7 @@ callSintaxError() {
     echo "  1 - Nombre de archivo de salida:    "$outputFileName""
     echo "  2 - Directorio a analizar:          "$directorioDeAnalisis""
     echo "  3 - Directorio de Salida:           "$directorioSalida""
-    echo "  4 - Umbral:                         "$umbral""
+    echo "  4 - Umbral:                         "$umbral"KB"
     echo ""
 
 #Inicio el ciclo para detectar archivos duplicados
@@ -148,7 +148,7 @@ callSintaxError() {
 #Muestro los files que superen el umbral.
     echo "" >> $directorioSalida/$outputFileName;
     echo "ARCHIVOS QUE SUPEREN EL UMBRAL: $umbral    [ SIZE | FILE ]" >> $directorioSalida/$outputFileName;
-    echo "$(find $directorioDeAnalisis -type f -name "*" -size +"$umbral"c -ls | awk '{print $7,$11}' | sort -r)" >> $directorioSalida/$outputFileName;
+    echo "$(find $directorioDeAnalisis -type f -name "*" -size +"$umbral"k -ls | awk '{print $7,$11}' | sort -r)" >> $directorioSalida/$outputFileName;
     echo ""
 
 # Muestro por pantalla el file resultante
