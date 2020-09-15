@@ -25,7 +25,7 @@ parametersError() {
 }
 
 callSintaxError() { 
-    echo "Error de sintaxis en la llamada a la función. Cantidad minima de parametros requerida no cumplida"
+    echo "Error de sintaxis en la llamada a la función. Cantidad minima/maxima de parametros requerida no cumplida"
     display_help;
     exit 0;
 }
@@ -35,17 +35,12 @@ callSintaxError() {
                 display_help # Mostramos la ayuda sobre el call de la función.
     else
 
-        if [ $# -lt 4 ] ; then # Verifico si no cumple la cantidad minima de parametros requeridos
+        if [ $# -lt 4 ] || [ $# -gt 6 ]; then # Verifico si no cumple la cantidad minima de parametros requeridos
             callSintaxError
         fi
 
         while [[ $# > 0 ]] # Itero sobre la cantidad de parametros que se ingresaron.
         do
-        
-            if [[ "$1" != "-s" ]] && [[ "$1" != "-i" ]] && [[ "$1" != "-o" ]]; then
-                callSintaxError;
-            fi
-
             case "$1" in
                 -s) # Hacemos los parametros se desplacen una posición para atras, ej: $2 pasa a ser $1.
                     shift 
@@ -86,7 +81,8 @@ callSintaxError() {
                         fi
                     shift 
                     ;;
-                *)
+                *)  
+                    callSintaxError;
                     shift 
                     ;;
             esac
