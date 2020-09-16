@@ -119,4 +119,15 @@ callSintaxError() {
     echo ""
 
 
+    if [ -r "$fileHTML".tmp ]; then
+        rm "$fileHTML".tmp;
+    fi
+
+    for word in $(cat "$fileTags")#Cambiar a una ruta variable.
+    do
+        grep -n \<$word "$fileHTML" >> "$fileHTML".tmp;
+    done;
+
+
+
 #FIN
