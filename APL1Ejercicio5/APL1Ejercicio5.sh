@@ -119,35 +119,30 @@ callSintaxError() {
     echo ""
 
 
-
-    if [ -r "$fileHTML".tmp ]; then
-        rm "$fileHTML".tmp;
-    fi
-
-    #Creo una copia del HTML para romperlo todo con el sed -i
-    cp $fileHTML "$fileHTML".tmp;
-
-    grep -vif "$fileAria" "$fileHTML".tmp > "$fileHTML"2.tmp
+    grep -vif "$fileAria" "$fileHTML" > "$fileHTML".tmp
 
     #Creo el archivo de salida con ese encabezado
     echo "{" > "$outputFileDirectory/$outputFileName";
     echo -e '\t' "[" >> "$outputFileDirectory/$outputFileName";
 
-    cantidadTabs=$(cat "$fileTags" | wc -l);
+    #Contamos la cantidad de tags que analizamos
+    cantidadTags=$(cat "$fileTags" | wc -w);
 
     cont=0;
 
+    #Iteramos el contador para saber cuando llegamos al limite de tag
+    #Interamos el file de tags procesando las coincidencias de todos los tags que llegan por archivo
     for word in $(cat "$fileTags") 
     do 
         (( cont++ ));
-        grep -n \<$word "$fileHTML"2.tmp | awk -f parseo.awk -v etiqueta=$word -v cantidadTabs=$cantidadTabs -v contadorTabs=$cont>> "$outputFileDirectory/$outputFileName"
+        grep -n \<$word "$fileHTML".tmp | awk -f parseo.awk -v etiqueta=$word -v cantidadTags=$cantidadTags -v contadorTags=$cont>> "$outputFileDirectory/$outputFileName"
     done;
 
     echo -e '\t' "]" >> "$outputFileDirectory/$outputFileName";
     echo "}" >> "$outputFileDirectory/$outputFileName";
 
     #Borrar los temporales.
-    rm -r "$fileHTML".tmp "$fileHTML"2.tmp;
+    rm "$fileHTML".tmp 
 
 
-#FIN
+#FIN 

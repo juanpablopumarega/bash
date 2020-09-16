@@ -4,7 +4,7 @@ BEGIN{
 }
 
 {
-    array[$1] = etiqueta;
+    array[$1] = "holis";
     cont++;
 }
 
@@ -14,7 +14,7 @@ END{
     
     printf("\t\t\t\"cantidad\": %d,\n", cont);
 
-    printf("\t\t\t\"lineas\":[");
+    printf("\t\t\t\"lineas\": [");
    
     cont2 = 1;
     for (key in array){
@@ -24,12 +24,12 @@ END{
             printf("%d, ", key);
             cont2++;
         }
-    }
-    
+    }   
     
     print("]");
-    if (contadorTabs==cantidadTabs)
+    if (contadorTags==cantidadTags)
         print("\t\t}");
     else
         print("\t\t},");
+    
 }

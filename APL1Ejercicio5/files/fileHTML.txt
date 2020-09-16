@@ -1,4 +1,4 @@
-<div class="text">
+<div class="text" aria-labelledby>
        <label id="tp1-label" for="nombre">
            Nombre:
        </label>
@@ -10,7 +10,7 @@
        <input type="text" id="nombre" name="nombre" size="20" aria-labelledby="tp1-label" aria-describedby="tp1" aria-required="true" />
 
         <input>
-         <br>
+         <br aria-labelledby>
         <link aria-laputa> 
             "asdsadasfds"
         </link>
