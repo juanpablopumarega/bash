@@ -119,15 +119,35 @@ callSintaxError() {
     echo ""
 
 
+
     if [ -r "$fileHTML".tmp ]; then
         rm "$fileHTML".tmp;
     fi
 
-    for word in $(cat "$fileTags")#Cambiar a una ruta variable.
-    do
-        grep -n \<$word "$fileHTML" >> "$fileHTML".tmp;
+    #Creo una copia del HTML para romperlo todo con el sed -i
+    cp $fileHTML "$fileHTML".tmp;
+
+    grep -vif "$fileAria" "$fileHTML".tmp > "$fileHTML"2.tmp
+
+    #Creo el archivo de salida con ese encabezado
+    echo "{" > "$outputFileDirectory/$outputFileName";
+    echo -e '\t' "[" >> "$outputFileDirectory/$outputFileName";
+
+    cantidadTabs=$(cat "$fileTags" | wc -l);
+
+    cont=0;
+
+    for word in $(cat "$fileTags") 
+    do 
+        (( cont++ ));
+        grep -n \<$word "$fileHTML"2.tmp | awk -f parseo.awk -v etiqueta=$word -v cantidadTabs=$cantidadTabs -v contadorTabs=$cont>> "$outputFileDirectory/$outputFileName"
     done;
 
+    echo -e '\t' "]" >> "$outputFileDirectory/$outputFileName";
+    echo "}" >> "$outputFileDirectory/$outputFileName";
+
+    #Borrar los temporales.
+    rm -r "$fileHTML".tmp "$fileHTML"2.tmp;
 
 
 #FIN
