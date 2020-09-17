@@ -33,7 +33,7 @@ callSintaxError() {
 
 # INICIO DE VALIDACION DE PARAMETROS
     if [ "$1" == "-h" ] || [ "$1" == "-help" ]; then
-                display_help # Mostramos la ayuda sobre el call de la función.
+        display_help # Mostramos la ayuda sobre el call de la función.
     else
 
         if [ $# -ne 8 ] ; then # Verifico si no cumple la cantidad minima de parametros requeridos
@@ -117,7 +117,6 @@ callSintaxError() {
     echo "  3 - File HTML a analizar:           "$fileHTML""
     echo "  4 - File de Salida:                 "$outputFileDirectory/$outputFileName""
     echo ""
-
 
     grep -vif "$fileAria" "$fileHTML" > "$fileHTML".tmp
 
