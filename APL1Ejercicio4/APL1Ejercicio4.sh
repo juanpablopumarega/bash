@@ -18,7 +18,7 @@ emptyDirectory() {
 }
 
 parametersError() { 
-    echo "Error. El directorio $1 no es un directorio válido o el file no tiene permisos de lectura"
+    echo "Error. El directorio $1 no es un directorio válido o no tiene permisos de escritura"
     display_help;
     exit 0;
 }
@@ -60,7 +60,7 @@ callSintaxError() {
                         if [ -z "$1" ] ; then
                             directorioSalida=$(echo $PWD);
                         elif
-                            [ ! -r "$1" ] ; then
+                            [ ! -w "$1" ] ; then
                                 parametersError "$1";
                         else 
                             directorioSalida="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
@@ -87,7 +87,7 @@ callSintaxError() {
     export outputFileName
     export archivoDeBlacklist
 # Se le da permisos de ejecucion al segundo script, y se lo ejecuta en segundo plano    
-    chmod +x "$PWD/blacklist.sh"
-    ./blacklist.sh &
+    chmod +x "$PWD/depuradorBlacklist.sh"
+    ./depuradorBlacklist.sh &
     
 #FIN   
