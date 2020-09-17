@@ -110,9 +110,14 @@ callSintaxError() {
 declare -A nombrePaciente
 
 cantDias=30
+accion="descomprimir"
+paciente="Alfredo Fettucini"
 
-#cambiar por parametro la direc del file
-while read -r line
+
+fechaHoy=$(date +"%Y-%m-%d")
+if [[ $accion == "comprimir" ]]; then
+  #cambiar por parametro la direc del file
+    while read -r line
     do
         nombre="$(echo "$line" | cut -d '|' -f 1)"
         fecha=$(echo "$line" | cut -d '|' -f 2)
@@ -123,22 +128,31 @@ while read -r line
         fi 
 
     done < ./files/ultimasvisitas.txt 
-
-#Para ver las variables 
   for key in "${!nombrePaciente[@]}";
     do     
-        echo "Nombre Paciente: $key"
-        echo "Fecha: ${nombrePaciente[$key]}"
-    done
-
-#Resto fechas
-fechaHoy=$(date +"%Y-%m-%d")
-
-  for key in "${!nombrePaciente[@]}";
-    do     
+    # Comprimimos el/los archivos de los pacientes cuya ultima consulta fue previa a la variable -n
         fechaUltVisita=${nombrePaciente[$key]}
         difDias="$(( ($(date -d $fechaHoy +%s) - $(date -d $fechaUltVisita +%s)) / 86400 ))"
-        if [ $cantDias -gt $difDias ] ; then 
-            zip ./files/$key
+        if [ $cantDias -lt $difDias ] ; then 
+            cd ./files
+            tar -zcf "$key".tar.gz "$key"
+            rm -r "$key"
+            
+            echo "$key - - - - - - - - Compresion correcta"
+            (( cantidadComprimidos++ ))
+
+            cd - > /dev/null
         fi    
     done
+    echo "Se han comprimido exitosamente: $cantidadComprimidos"
+elif [[ $accion == "descomprimir" ]]; then
+#insertar aqui funcion de descompresion
+    cd ./files
+    tar -xzf "$paciente".tar.gz
+    rm -r "$paciente".tar.gz
+    echo "$paciente - - - - - - - - - - Descompresion correcta"
+
+    cd - > /dev/null
+fi
+
+
