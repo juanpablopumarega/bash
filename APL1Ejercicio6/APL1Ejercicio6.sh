@@ -109,12 +109,19 @@ callSintaxError() {
 
 declare -A nombrePaciente
 
+cantDias=30
+
 #cambiar por parametro la direc del file
 while read -r line
     do
         nombre="$(echo "$line" | cut -d '|' -f 1)"
         fecha=$(echo "$line" | cut -d '|' -f 2)
-        nombrePaciente["$nombre"]=$fecha
+
+        #Si existe un directorio con el nombre del paciente, cargo el array con el
+        if [ -d ./files/"$nombre" ] ; then
+            nombrePaciente["$nombre"]=$fecha
+        fi 
+
     done < ./files/ultimasvisitas.txt 
 
 #Para ver las variables 
@@ -124,19 +131,14 @@ while read -r line
         echo "Fecha: ${nombrePaciente[$key]}"
     done
 
-#Chequeo que exista un directorio con el nombre del paciente
-  for key in "${!nombrePaciente[@]}";
-    do     
-        if [ -d ./files/"$key" ] ; then
-            echo "Es un directorio "$key""
-        fi
-    done
-
-#Resto fechas para hallar las n 
+#Resto fechas
 fechaHoy=$(date +"%Y-%m-%d")
 
   for key in "${!nombrePaciente[@]}";
     do     
         fechaUltVisita=${nombrePaciente[$key]}
-        echo "Dias: $(( ($(date -d $fechaHoy +%s) - $(date -d $fechaUltVisita +%s)) / 86400 ))"
+        difDias="$(( ($(date -d $fechaHoy +%s) - $(date -d $fechaUltVisita +%s)) / 86400 ))"
+        if [ $cantDias -gt $difDias ] ; then 
+            zip ./files/$key
+        fi    
     done
