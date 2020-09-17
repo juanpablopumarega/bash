@@ -5,12 +5,12 @@ display_help() {
     echo
     echo "Usage: $0 [option...]"
     echo
-    echo "   -c,    [-Unique] Si este parámetro está presente se comprimen los archivos"
-    echo "   -n,    [Optional if -c] Cantidad de días a tener en cuenta para comprimir, por defecto son 30"
-    echo "   -d,    [-Unique] Si este parámetro está presente se descomprimen los archivos"
-    echo "   -p,    [Required if -d] Indica el nombre del paciente del cual se quiere descomprimir la historia clínica"
-    echo "   -hc,   [Required] Path relativo o absoluto del directorio en donde se encuentran las historias clínicas de los pacientes y el archivo “últimas visitas.txt”"
-    echo "   -z,    [Required] Path relativo o absoluto del directorio en donde se guardan los archivos comprimidos"
+    echo "   -c,    [-Unique]           Si este parámetro está presente se comprimen los archivos"
+    echo "   -n,    [Optional if -c]    Cantidad de días a tener en cuenta para comprimir, por defecto son 30"
+    echo "   -d,    [-Unique]           Si este parámetro está presente se descomprimen los archivos"
+    echo "   -p,    [Required if -d]    Indica el nombre del paciente del cual se quiere descomprimir la historia clínica"
+    echo "   -hc,   [Required]          Path relativo o absoluto del directorio en donde se encuentran las historias clínicas de los pacientes y el archivo “últimas visitas.txt”"
+    echo "   -z,    [Required]          Path relativo o absoluto del directorio en donde se guardan los archivos comprimidos"
     echo
     exit 1
 }
