@@ -152,7 +152,7 @@ callSintaxError() {
 #Comprimimos si llega la acción.
     if [[ $action == "-c" ]]; then
 
-        if [ ! -r $directoryHC/ultimasvisitas.txt ] ; then
+        if [ ! -r "$directoryHC"/ultimasvisitas.txt ] ; then
             parametersError;
         fi
 
@@ -167,7 +167,7 @@ callSintaxError() {
             fi 
         done < "$directoryHC"/ultimasvisitas.txt 
 
-    ##Comprimimos el/los archivos de los pacientes cuya ultima consulta fue previa a la variable -n
+    #Comprimimos el/los archivos de los pacientes cuya ultima consulta fue previa a la variable -n
     for key in "${!ListadoPacientes[@]}";
         do     
             fechaUltVisita=${ListadoPacientes[$key]}
@@ -177,6 +177,7 @@ callSintaxError() {
                 cd "$directoryHC"
                 tar -zcf "$key".tar.gz "$key"
                 rm -r "$key"
+                mv -f "$key".tar.gz "$fileZ"/"$key"
                 echo "$key - - - - - - - - Compresion correcta"
                 (( cantidadComprimidos++ ))
                 cd - > /dev/null
@@ -193,5 +194,5 @@ callSintaxError() {
         cd - > /dev/null
     fi
 
-#Falta validar la existencia del archivo de historia
+
 #Falta que el comprimido viaje hacia otro rumbo.
