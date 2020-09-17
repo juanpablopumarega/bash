@@ -140,7 +140,7 @@ callSintaxError() {
     echo "  2 - Cantidad de dias antiguedad:            "$cantDias""
     echo "  3 - Paciente a descomprimir:                "$nombrePacienteADescomprimir""
     echo "  4 - File de historia clinica:               "$directoryHC/ultimasvisitas.txt""
-    echo "  4 - Directorio donde guardar comprimidos:   "$fileZ""
+    echo "  5 - Directorio donde guardar comprimidos:   "$fileZ""
     echo ""
 
 #Declaro el array a utilizar.
