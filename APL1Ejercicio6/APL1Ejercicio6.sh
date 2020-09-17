@@ -34,125 +34,164 @@ callSintaxError() {
 }
 
 # INICIO DE VALIDACION DE PARAMETROS
+    flag=0;
+
     if [ "$1" == "-h" ] || [ "$1" == "-help" ]; then
-                display_help # Mostramos la ayuda sobre el call de la función.
+        display_help # Mostramos la ayuda sobre el call de la función.
     else
 
-        if [ $# -gt 7 ] ; then # Verifico si no cumple la cantidad minima de parametros requeridos
-            callSintaxError
+        if [ $# -lt 5 ] ; then # Verifico si no cumple la cantidad minima de parametros requeridos.
+            callSintaxError;
         fi
 
         while [[ $# > 0 ]] # Itero sobre la cantidad de parametros que se ingresaron.
         do
             case "$1" in
                 -c)
-                        shift 
-                            # Validación del parametro -tags (Obligatorio y válido)
-                            if [ -z "$1" ] ; then
-                                    emptyDirectory "Analisis (--tags)";
-                            elif
-                                [ ! -r "$1" ] ; then
-                                    parametersError "$1";
-                                else
-                                    fileTags="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
-                            fi
-                        shift 
-                        ;;
-                --web)
-                        shift 
-                            # Validación del parametro -web (Obligatorio y válido)
-                            if [ -z "$1" ] ; then
-                                    emptyDirectory "Analisis (--web)";
-                            elif
-                                [ ! -r "$1" ] ; then
-                                    parametersError "$1";
-                                else
-                                    fileHTML="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
-                            fi
-                        shift 
-                        ;;
-                --out)
-                        shift 
-                            # Validación del parametro -out (Obligatorio y válido)
-                            if [ -z "$1" ] ; then
-                                    emptyDirectory "Analisis (--out)";
-                            elif
-                                [ ! -r "$1" ] ; then
-                                    parametersError "$1";
-                                else
-                                    outputFileDirectory="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
-                            fi
-                        shift 
-                        ;;
-                *)  
+                    # Validación del parametro -c (Uncio y válido).
+                    if [ $flag = "d" ] || [ $flag = "p" ] ; then
+                        parametersError "$1";
+                    else
+                        if [[ $flag == 0 ]] ; then
+                            flag="c";
+                        fi
+                        action="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
+                    fi
+                    shift
+                    ;;
+                -d)
+                    # Validación del parametro -d (Unico y válido).
+                    if [ $flag = "c" ] || [ $flag = "n" ] ; then
+                        parametersError "$1";
+                    else
+                        if [[ $flag == 0 ]] ; then
+                            flag="d";
+                        fi
+                        action="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
+                    fi 
+                    shift
+                    ;;
+                -n)
+                    shift #VALIDAR QUE SEAN DIAS
+                    if [[ $1 < 1 ]] || [ $flag = "d" ] || [ $flag = "p" ] ; then
                         callSintaxError;
-                        shift 
-                        ;;
+                    else
+                        if [[ $flag == 0 ]] ; then
+                            flag="n";
+                        fi
+                        cantDias=$1;
+                    fi
+                    shift
+                    ;;
+                -p)
+                    shift
+                    if [ -z "$1" ] || [ $flag = "c" ] || [ $flag = "n" ] ; then
+                        callSintaxError;
+                    else
+                        if [[ $flag == 0 ]] ; then
+                            flag="p";
+                        fi
+                        nombrePacienteADescomprimir=$1;
+                    fi
+                    shift
+                    ;;    
+                -hc)
+                    shift
+                        if [ -z "$1" ] ; then
+                            emptyDirectory "Analisis (-hc)";
+                        elif [ ! -r "$1" ] ; then
+                            parametersError "$1";
+                        else
+                            directoryHC="$1"; # Asigno la variable correspondiente ya que paso las validaciones. Historias Clinicas
+                        fi
+                    shift
+                    ;;
+                -z)
+                    shift
+                        if [ -z "$1" ] ; then
+                            emptyDirectory "Analisis (-z)";
+                        elif [ ! -r "$1" ] ; then
+                            parametersError "$1";
+                        else
+                            fileZ="$1"; # Asigno la variable correspondiente ya que paso las validaciones. Historias Clinicas
+                        fi
+                    shift
+                    ;;                
+                *)  
+                    callSintaxError;
+                    shift 
+                    ;;
             esac
         done
     fi
+
+    #Si no recibimos cantidad de dias por parametros, el default será 30.
+    if [ -z $cantDias ] && [ $action = "-c" ] ; then
+        cantDias=30;
+    fi
+
 # FIN DE VALIDACION DE PARAMETROS
-
-
-#Nombre del archivo de salidaq
-    outputFileName=$(echo accessibilityTEst_$(date +"%Y-%m-%d_%H:%M:%S").out)
 
 #Impresiones por pantalla de ayuda, borrar antes de entregar.
     echo "" 
     echo "  EJECUTANDO EL SCRIPT: $0"
     echo ""
-    echo "  1 - File de Arias:                  "$fileAria""
-    echo "  2 - File de Tags:                   "$fileTags""
-    echo "  3 - File HTML a analizar:           "$fileHTML""
-    echo "  4 - File de Salida:                 "$outputFileDirectory/$outputFileName""
+    echo "  1 - La accion a realizar es                 "$action""
+    echo "  2 - Cantidad de dias antiguedad:            "$cantDias""
+    echo "  3 - Paciente a descomprimir:                "$nombrePacienteADescomprimir""
+    echo "  4 - File de historia clinica:               "$directoryHC/ultimasvisitas.txt""
+    echo "  4 - Directorio donde guardar comprimidos:   "$fileZ""
     echo ""
 
-declare -A nombrePaciente
+#Declaro el array a utilizar.
+    declare -A ListadoPacientes
 
-cantDias=30
-accion="descomprimir"
-paciente="Alfredo Fettucini"
+#Declaramos la fecha de hoy para realizar la comparación contra el archivo de historiales.
+    fechaHoy=$(date +"%Y-%m-%d")
 
+#Comprimimos si llega la acción.
+    if [[ $action == "-c" ]]; then
 
-fechaHoy=$(date +"%Y-%m-%d")
-if [[ $accion == "comprimir" ]]; then
-  #cambiar por parametro la direc del file
-    while read -r line
-    do
-        nombre="$(echo "$line" | cut -d '|' -f 1)"
-        fecha=$(echo "$line" | cut -d '|' -f 2)
+        if [ -r $directoryHC/ultimasvisitas.txt ] ; then
+            parametersError;
+        fi
 
-        #Si existe un directorio con el nombre del paciente, cargo el array con el
-        if [ -d ./files/"$nombre" ] ; then
-            nombrePaciente["$nombre"]=$fecha
-        fi 
+        while read -r line
+        do
+            nombre="$(echo "$line" | cut -d '|' -f 1)"
+            fecha=$(echo "$line" | cut -d '|' -f 2)
 
-    done < ./files/ultimasvisitas.txt 
-  for key in "${!nombrePaciente[@]}";
-    do     
-    # Comprimimos el/los archivos de los pacientes cuya ultima consulta fue previa a la variable -n
-        fechaUltVisita=${nombrePaciente[$key]}
-        difDias="$(( ($(date -d $fechaHoy +%s) - $(date -d $fechaUltVisita +%s)) / 86400 ))"
-        if [ $cantDias -lt $difDias ] ; then 
-            cd ./files
-            tar -zcf "$key".tar.gz "$key"
-            rm -r "$key"
+            #Si existe un directorio con el nombre del paciente, lo cargo en el array.
+            if [ -d "$directoryHC"/"$nombre" ] ; then
+                ListadoPacientes["$nombre"]=$fecha
+            fi 
+        done < "$directoryHC"/ultimasvisitas.txt 
+
+    ##Comprimimos el/los archivos de los pacientes cuya ultima consulta fue previa a la variable -n
+    for key in "${!ListadoPacientes[@]}";
+        do     
+            fechaUltVisita=${ListadoPacientes[$key]}
+            difDias="$(( ($(date -d $fechaHoy +%s) - $(date -d $fechaUltVisita +%s)) / 86400 ))"
             
-            echo "$key - - - - - - - - Compresion correcta"
-            (( cantidadComprimidos++ ))
+            if [ $cantDias -lt $difDias ] ; then 
+                cd "$directoryHC"
+                tar -zcf "$key".tar.gz "$key"
+                rm -r "$key"
+                echo "$key - - - - - - - - Compresion correcta"
+                (( cantidadComprimidos++ ))
+                cd - > /dev/null
+            fi
+        done
+        echo "Se han comprimido exitosamente: $cantidadComprimidos"
 
-            cd - > /dev/null
-        fi    
-    done
-    echo "Se han comprimido exitosamente: $cantidadComprimidos"
-elif [[ $accion == "descomprimir" ]]; then
-#insertar aqui funcion de descompresion
-    cd ./files
-    tar -xzf "$paciente".tar.gz
-    rm -r "$paciente".tar.gz
-    echo "$paciente - - - - - - - - - - Descompresion correcta"
+#Descomprimimos si llega la acción.
+    elif [[ $action == "-d" ]]; then
+        cd "$directoryHC"
+        tar -xzf "$nombrePacienteADescomprimir".tar.gz
+        rm -r "$nombrePacienteADescomprimir".tar.gz
+        echo "$nombrePacienteADescomprimir - - - - - - - - - - Descompresion correcta"
+        cd - > /dev/null
+    fi
 
-    cd - > /dev/null
-fi
-
-
+#Falta validar la existencia del archivo de historia
+#Falta que el comprimido viaje hacia otro rumbo.
