@@ -10,7 +10,7 @@ display_help() {
     echo "   -d,    [Required] Si este parámetro está presente se descomprimen los archivos"
     echo "   -p,    [Required] Indica el nombre del paciente del cual se quiere descomprimir la historia clínica"
     echo "   -hc,   [Required] Path relativo o absoluto del directorio en donde se encuentran las historias clínicas de los pacientes y el archivo “últimas visitas.txt”"
-    echo "   -z,    [Required]  path relativo o absoluto del directorio en donde se guardan los archivos comprimidos"
+    echo "   -z,    [Required] Path relativo o absoluto del directorio en donde se guardan los archivos comprimidos"
     echo
     exit 1
 }
@@ -45,9 +45,7 @@ callSintaxError() {
         while [[ $# > 0 ]] # Itero sobre la cantidad de parametros que se ingresaron.
         do
             case "$1" in
-                -c) # 
-                if "$1" in 
-                --tags)
+                -c)
                         shift 
                             # Validación del parametro -tags (Obligatorio y válido)
                             if [ -z "$1" ] ; then
@@ -108,3 +106,37 @@ callSintaxError() {
     echo "  3 - File HTML a analizar:           "$fileHTML""
     echo "  4 - File de Salida:                 "$outputFileDirectory/$outputFileName""
     echo ""
+
+declare -A nombrePaciente
+
+#cambiar por parametro la direc del file
+while read -r line
+    do
+        nombre="$(echo "$line" | cut -d '|' -f 1)"
+        fecha=$(echo "$line" | cut -d '|' -f 2)
+        nombrePaciente["$nombre"]=$fecha
+    done < ./files/ultimasvisitas.txt 
+
+#Para ver las variables 
+  for key in "${!nombrePaciente[@]}";
+    do     
+        echo "Nombre Paciente: $key"
+        echo "Fecha: ${nombrePaciente[$key]}"
+    done
+
+#Chequeo que exista un directorio con el nombre del paciente
+  for key in "${!nombrePaciente[@]}";
+    do     
+        if [ -d ./files/"$key" ] ; then
+            echo "Es un directorio "$key""
+        fi
+    done
+
+#Resto fechas para hallar las n 
+fechaHoy=$(date +"%Y-%m-%d")
+
+  for key in "${!nombrePaciente[@]}";
+    do     
+        fechaUltVisita=${nombrePaciente[$key]}
+        echo "Dias: $(( ($(date -d $fechaHoy +%s) - $(date -d $fechaUltVisita +%s)) / 86400 ))"
+    done
