@@ -5,10 +5,12 @@ display_help() {
     echo
     echo "Usage: $0 [option...]"
     echo
-    echo "   --aria,    [Required] Path absoluto o relativo del archivo que contiene la lista de atributos aria."
-    echo "   --tags,    [Required] Path absoluto o relativo del archivo que contiene la lista de etiquetas a analizar."
-    echo "   --web,     [Required] Path absoluto o relativo del archivo HTML a evaluar."
-    echo "   --out,     [Required] Path absoluto o relativo del archivo de salida"
+    echo "   -c,    [Required] Si este parámetro está presente se comprimen los archivos"
+    echo "   -n,    [Required] Cantidad de días a tener en cuenta para comprimir, si no está por defecto son 30"
+    echo "   -d,    [Required] Si este parámetro está presente se descomprimen los archivos"
+    echo "   -p,    [Required] Indica el nombre del paciente del cual se quiere descomprimir la historia clínica"
+    echo "   -hc,   [Required] Path relativo o absoluto del directorio en donde se encuentran las historias clínicas de los pacientes y el archivo “últimas visitas.txt”"
+    echo "   -z,    [Required]  path relativo o absoluto del directorio en donde se guardan los archivos comprimidos"
     echo
     exit 1
 }
@@ -36,26 +38,15 @@ callSintaxError() {
                 display_help # Mostramos la ayuda sobre el call de la función.
     else
 
-        if [ $# -ne 8 ] ; then # Verifico si no cumple la cantidad minima de parametros requeridos
+        if [ $# -gt 7 ] ; then # Verifico si no cumple la cantidad minima de parametros requeridos
             callSintaxError
         fi
 
         while [[ $# > 0 ]] # Itero sobre la cantidad de parametros que se ingresaron.
         do
             case "$1" in
-                --aria) # Hacemos los parametros se desplacen una posición para atras, ej: $2 pasa a ser $1.
-                        shift 
-                            # Validación del parametro -aria (Obligatorio y válido)
-                            if [ -z "$1" ] ; then
-                                    emptyDirectory "Analisis (--aria)";
-                            elif
-                                [ ! -r "$1" ] ; then
-                                    parametersError "$1";
-                                else
-                                    fileAria="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
-                            fi
-                        shift 
-                        ;;
+                -c) # 
+                if "$1" in 
                 --tags)
                         shift 
                             # Validación del parametro -tags (Obligatorio y válido)
