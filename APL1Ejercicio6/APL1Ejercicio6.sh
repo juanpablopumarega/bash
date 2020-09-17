@@ -5,10 +5,10 @@ display_help() {
     echo
     echo "Usage: $0 [option...]"
     echo
-    echo "   -c,    [Required] Si este parámetro está presente se comprimen los archivos"
-    echo "   -n,    [Required] Cantidad de días a tener en cuenta para comprimir, si no está por defecto son 30"
-    echo "   -d,    [Required] Si este parámetro está presente se descomprimen los archivos"
-    echo "   -p,    [Required] Indica el nombre del paciente del cual se quiere descomprimir la historia clínica"
+    echo "   -c,    [-Unique] Si este parámetro está presente se comprimen los archivos"
+    echo "   -n,    [Optional if -c] Cantidad de días a tener en cuenta para comprimir, por defecto son 30"
+    echo "   -d,    [-Unique] Si este parámetro está presente se descomprimen los archivos"
+    echo "   -p,    [Required if -d] Indica el nombre del paciente del cual se quiere descomprimir la historia clínica"
     echo "   -hc,   [Required] Path relativo o absoluto del directorio en donde se encuentran las historias clínicas de los pacientes y el archivo “últimas visitas.txt”"
     echo "   -z,    [Required] Path relativo o absoluto del directorio en donde se guardan los archivos comprimidos"
     echo
@@ -152,7 +152,7 @@ callSintaxError() {
 #Comprimimos si llega la acción.
     if [[ $action == "-c" ]]; then
 
-        if [ -r $directoryHC/ultimasvisitas.txt ] ; then
+        if [ ! -r $directoryHC/ultimasvisitas.txt ] ; then
             parametersError;
         fi
 
