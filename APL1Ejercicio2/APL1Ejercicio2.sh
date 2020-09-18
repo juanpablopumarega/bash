@@ -124,14 +124,17 @@ callSintaxError() {
 #Escribo el archvio de salida leyendo el array
     for i in "${!array[@]}" 
     do 
-        echo "$i,${array[$i]}" >> "$directorio_salida/$outputFileName"
+        echo "$i,${array[$i]}" >> "/tmp/$outputFileName.tmp"
     done
 
-#Otorgo permisos de ejecución y realizo el sort sobre los 5 ma repetidos (-t indica separador, -k2 indica segunda columna, -nr orden numerico y de descendente)
-    chmod +r "$directorio_salida/$outputFileName"
-    cat "$directorio_salida/$outputFileName" | sort -t"," -k2nr | head -5
+#Crep el file de salida ordenado (-t indica separador, -k2 indica segunda columna, -nr orden numerico y de descendente)
+    cat "/tmp/$outputFileName.tmp" | sort -t"," -k2nr > "$directorio_salida/$outputFileName"
+
+#Muestro el top 5
+    cat "$directorio_salida/$outputFileName" | head -5
 
 #Borro el file temporal utilizado
     rm "$archivoTEMP";
+    rm "/tmp/$outputFileName.tmp";
 
 #FIN
