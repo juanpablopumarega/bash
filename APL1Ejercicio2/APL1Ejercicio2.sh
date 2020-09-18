@@ -5,7 +5,7 @@ display_help() {
     echo
     echo "Usage: $0 [option...]"
     echo
-    echo "   -s,    [Required] Path absoluto o relativo del archivo con los stopwords. "
+    echo "   -s,    [Required]  Path absoluto o relativo del archivo con los stopwords. "
     echo "   -o,    [Optional]  Path absoluto o relativo del directorio donde se generara el archivo de salida. Opcional. Si no se informa, se generaraá en el directoio de ejecución."
     echo "   -i,    [Required]  Path absoluto o relativo del archivo de texto a analizar"
     echo
@@ -93,40 +93,23 @@ callSintaxError() {
     fi
 # FIN DE VALIDACION DE PARAMETROS
 
-#Nombre del archivo de salida
-    outputFileName=$(echo frecuencias_$(basename "$archivo_analizar")_$(date +"%Y-%m-%d_%H:%M:%S").out)
-
-#Impresiones por pantalla de ayuda, borrar antes de entregar.
-    echo "" 
-    echo "  EJECUTANDO EL SCRIPT: $0"
-    echo ""
-    echo "  1 - Nombre de archivo de salida:    "$outputFileName""
-    echo "  2 - Archivo de StopWords:           "$archivo_stopwords""
-    echo "  3 - Directorio de Salida:           "$directorio_salida""
-    echo "  4 - Archivo a Analizar:             "$archivo_analizar""
-    echo ""
-
-    cat "$archivo_analizar" | tr ‘[a-z]’ ‘[A-Z]’ > $archivo_analizar.mayus;
+#Genero un archivo temporal en /tmp con el contenido ya transformado a mayusculas
+    archivoTEMP=$(echo /tmp/"$(basename "$archivo_analizar").mayus")
+    cat "$archivo_analizar" | tr ‘[a-z]’ ‘[A-Z]’ > "$archivoTEMP";
 
 #Doble for para leer por linea y luego por palabra a eliminar.
-    for linea in $(cat "$archivo_stopwords" | tr ‘[a-z]’ ‘[A-Z]’)
+    for word in $(cat "$archivo_stopwords" | tr ‘[a-z]’ ‘[A-Z]’)
     do
-        for word in $linea
-        do
-            sed -i -e 's/\b'"$word"'\b//g' "$archivo_analizar.mayus" #reemplazo la palabra de Stop Words por nada en el archivo analizado.
-        done
+        sed -i -e 's/\b'"$word"'\b//g' "$archivoTEMP" #reemplazo la palabra de Stop Words por nada en el archivo analizado.
     done
 
 #Este cambio es para que tenga en cuenta todos los signos de puntuacion. 
-    sed -i -e 's/[[:punct:]]/ /g' "$archivo_analizar.mayus";
-
-#Y luego de ahi eliminar los posibles esapcios dobles
-    sed -i -e 's/  / /g' "$archivo_analizar.mayus" #la g al final es para que tome todos? 
+    sed -i -e 's/[[:punct:]]/ /g' "$archivoTEMP";
 
 #Llenamos un array asociativo con las palabras del archivo y contamos la ocurrencia de cada una.
     declare -A array
 
-    for word in $(cat "$archivo_analizar.mayus" | tr ‘[a-z]’ ‘[A-Z]’)
+    for word in $(cat "$archivoTEMP" | tr ‘[a-z]’ ‘[A-Z]’)
     do
         if [[ ! -z ${array[$word]} ]] ; then
             array[$word]=$(( ${array[$word]} + 1 ))
@@ -134,6 +117,9 @@ callSintaxError() {
             array[$word]=1;
         fi
     done
+
+#Nombre del archivo de salida
+    outputFileName=$(echo frecuencias_$(basename "$archivo_analizar")_$(date +"%Y-%m-%d_%H:%M:%S").out)
 
 #Escribo el archvio de salida leyendo el array
     for i in "${!array[@]}" 
@@ -144,5 +130,8 @@ callSintaxError() {
 #Otorgo permisos de ejecución y realizo el sort sobre los 5 ma repetidos (-t indica separador, -k2 indica segunda columna, -nr orden numerico y de descendente)
     chmod +r "$directorio_salida/$outputFileName"
     cat "$directorio_salida/$outputFileName" | sort -t"," -k2nr | head -5
+
+#Borro el file temporal utilizado
+    rm "$archivoTEMP";
 
 #FIN

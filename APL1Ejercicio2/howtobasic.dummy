@@ -1,1 +1,1 @@
-./APL1Ejercicio2.sh -s /home/jp/sisop/bash/APL1Ejercicio2/files/StopWords.dat -i /home/jp/sisop/bash/APL1Ejercicio2/files/file.txt
+./APL1Ejercicio2.sh -s ./files/StopWords.dat -i ./files/file.txt
