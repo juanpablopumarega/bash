@@ -156,31 +156,32 @@ callSintaxError() {
             fi 
         done < "$directoryHC"/ultimasvisitas.txt 
 
-    #Comprimimos el/los archivos de los pacientes cuya ultima consulta fue previa a la variable -n
+#Comprimimos el/los archivos de los pacientes cuya ultima consulta fue previa a la variable -n
     for key in "${!ListadoPacientes[@]}";
         do     
             fechaUltVisita=${ListadoPacientes[$key]}
             difDias="$(( ($(date -d $fechaHoy +%s) - $(date -d $fechaUltVisita +%s)) / 86400 ))"
             
             if [ $cantDias -lt $difDias ] ; then 
-                cd "$directoryHC"
+                cd "$directoryHC";
                 tar -zcf "$key".tar.gz "$key"
-                rm -r "$key"
-                cd ..
-
+                cd -;
                 mv -f "$directoryHC"/"$key".tar.gz "$fileZ"/"$key".tar.gz
+                rm -r "$directoryHC"/"$key" 
                 echo "$key - - - - - - - - Compresion correcta"
                 (( cantidadComprimidos++ ))
-                cd - > /dev/null
             fi
+
         done
         echo "Se han comprimido exitosamente: $cantidadComprimidos"
 
 #Descomprimimos si llega la acción.
     elif [[ $action == "-d" ]]; then
+        mv -f "$fileZ"/"$nombrePacienteADescomprimir".tar.gz "$directoryHC"
         cd "$directoryHC"
         tar -xzf "$nombrePacienteADescomprimir".tar.gz
         rm -r "$nombrePacienteADescomprimir".tar.gz
+        cd -;
         echo "$nombrePacienteADescomprimir - - - - - - - - - - Descompresion correcta"
         cd - > /dev/null
     fi
