@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackaton</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="index.html">Webstore Hackaton</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><!--Para que este seleccionado tengo que agregar active en el li-->
+                      Productos
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="libros.html">Libros</a>
+                      <a class="dropdown-item" href="discos.html">Discos</a>
+                    </div>
+                  </li>
+                  <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
+              </form>
+            </ul>  
+            <div class="form-inline my-2 my-lg-0">
+                <a class="nav-link"  href="index.html" id="focus-here">Ver Todo</a>
+                <a class="nav-link" href="agregar.html">Agregar Productos</a>
+            </div>      
+            </div>
+        </nav>
+
+
+
+
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card" >
+                    <img src="https://upload.wikimedia.org/wikipedia/en/f/f1/Tuareg_novel_-_bookcover.jpg" class="card-img-top" alt="Tuareg" >
+                    <div class="card-body">
+                      <p class="card-text"><span class="negrita">Nombre:</span>Tuareg</p>
+                      <p class="card-text"><span class="negrita">Categoria:</span>Novelas</p>
+                      <p class="card-text"><span class="negrita">Precio:</span>$255</p>
+                      <p class="card-text"><span class="negrita">Lugar de venta:</span>El ateneo</p>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card" >
+                    <img src="https://http2.mlstatic.com/cuentos-completos-jorge-luis-borges-D_NQ_NP_844694-MLA31061955958_062019-F.jpg" class="card-img-top" alt="Cuentos Completos">
+                    <div class="card-body">
+                        <p class="card-text"><span class="negrita">Nombre:</span>Cuentos Completos</p>
+                        <p class="card-text"><span class="negrita">Categoria:</span>Cuentos</p>
+                        <p class="card-text"><span class="negrita">Precio:</span>$500</p>
+                        <p class="card-text"><span class="negrita">Lugar de venta:</span>Gral. Las heras</p>
+                      </div>
+                  </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card" >
+                    <img src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1381175952i/18634090._UY475_SS475_.jpg" class="card-img-top" alt="Las mil y una noches">
+                    <div class="card-body">
+                        <p class="card-text"><span class="negrita">Nombre:</span>Mil y una noches</p>
+                        <p class="card-text"><span class="negrita">Categoria:</span>Cuentos</p>
+                        <p class="card-text"><span class="negrita">Precio:</span>$1500</p>
+                        <p class="card-text"><span class="negrita">Lugar de venta:</span>La calle</p>
+                        <p class="card-text"><span class="negrita">Descuento:</span>20%</p>
+                      </div>
+                  </div>
+            </div>
+                <div class="col-sm-3">
+                    <div class="card" >
+                        <img src="https://www.cmtv.com.ar/tapas-cd/redondosgulp.jpg" class="card-img-top" alt="Patricio Rey">
+                        <div class="card-body">
+                            <p class="card-text"><span class="negrita">Nombre:</span>La mosca y la sopa</p>
+                            <p class="card-text"><span class="negrita">Categoria:</span>Rock</p>
+                            <p class="card-text"><span class="negrita">Precio:</span>$10</p>
+                            <p class="card-text"><span class="negrita">Lugar de venta:</span>Zellig!</p>
+                            <p class="card-text"><span class="negrita">Descuento:</span>20%</p>
+                          </div>
+                      </div>
+                </div>
+            </div>
+            
+    
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card" >
+                    <img src="https://ksassets.timeincuk.net/wp/uploads/sites/55/2015/01/2014TheBeatles_LetItBe_091214.jpg" class="card-img-top" alt="Beatles">
+                    <div class="card-body">
+                        <p class="card-text"><span class="negrita">Nombre:</span>Let it be</p>
+                        <p class="card-text"><span class="negrita">Categoria:</span>Rock internacional</p>
+                        <p class="card-text"><span class="negrita">Precio:</span>$275</p>
+                        <p class="card-text"><span class="negrita">Lugar de venta:</span>La calle</p>
+                      </div>
+                  </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card" >
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Giros_1985_Fito_Paez.jpg/250px-Giros_1985_Fito_Paez.jpg" class="card-img-top" alt="Fito Paez">
+                    <div class="card-body">
+                        <p class="card-text"><span class="negrita">Nombre:</span>Giros</p>
+                        <p class="card-text"><span class="negrita">Categoria:</span>Rock</p>
+                        <p class="card-text"><span class="negrita">Precio:</span>$168</p>
+                        <p class="card-text"><span class="negrita">Lugar de venta:</span>Todo rock</p>
+                      </div>
+                  </div>
+            </div>
+            
+            
+            </div>
+            
+        </div>
+    </div>
+    
+</body>
+</html>
