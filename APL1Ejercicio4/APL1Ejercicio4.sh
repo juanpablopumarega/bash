@@ -30,7 +30,7 @@ callSintaxError() {
 }
 
 # INICIO DE VALIDACION DE PARAMETROS
-    if [ "$1" == "-h" ] || [ "$1" == "-help" ]; then
+    if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
                 display_help # Mostramos la ayuda sobre el call de la función.
     else
 
