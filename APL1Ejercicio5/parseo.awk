@@ -4,7 +4,7 @@ BEGIN{
 }
 
 {
-    array[$1] = "holis";
+    array[$1];
     cont++;
 }
 
