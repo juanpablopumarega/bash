@@ -28,7 +28,7 @@ parametersError() {
 }
 
 callSintaxError() { 
-    echo "Error de sintaxis en la llamada a la función. Cantidad minima de parametros requerida no cumplida"
+    echo "Error de sintaxis en la llamada a la función. Cantidad de parametros distinta a la requerida."
     display_help;
     exit 0;
 }
@@ -40,7 +40,7 @@ callSintaxError() {
         display_help # Mostramos la ayuda sobre el call de la función.
     else
 
-        if [ $# -lt 5 ] ; then # Verifico si no cumple la cantidad minima de parametros requeridos.
+        if [ $# -lt 5 ] || [ $# -gt 7 ]; then # Verifico si no cumple la cantidad minima de parametros requeridos.
             callSintaxError;
         fi
 
@@ -73,7 +73,7 @@ callSintaxError() {
                     ;;
                 -n)
                     shift #VALIDAR QUE SEAN DIAS
-                    if [[ $1 < 1 ]] || [ $flag = "d" ] || [ $flag = "p" ] ; then
+                    if [[ $1 < 1 ]] || [ $flag = "d" ] || [ $flag = "p" ] || [ ! -z $cantDias ]; then
                         callSintaxError;
                     else
                         if [[ $flag == 0 ]] ; then
@@ -85,7 +85,7 @@ callSintaxError() {
                     ;;
                 -p)
                     shift
-                    if [ -z "$1" ] || [ $flag = "c" ] || [ $flag = "n" ] ; then
+                    if [ -z "$1" ] || [ $flag = "c" ] || [ $flag = "n" ] || [ ! -z $nombrePacienteADescomprimir ]; then
                         callSintaxError;
                     else
                         if [[ $flag == 0 ]] ; then
@@ -101,6 +101,8 @@ callSintaxError() {
                             emptyDirectory "Analisis (-hc)";
                         elif [ ! -r "$1" ] ; then
                             parametersError "$1";
+                        elif [ ! -z $directoryHC ] ; then
+                            callSintaxError;
                         else
                             directoryHC="$1"; # Asigno la variable correspondiente ya que paso las validaciones. Historias Clinicas
                         fi
@@ -112,6 +114,8 @@ callSintaxError() {
                             emptyDirectory "Analisis (-z)";
                         elif [ ! -r "$1" ] ; then
                             parametersError "$1";
+                        elif [ ! -z $fileZ ] ; then
+                            callSintaxError;
                         else
                             fileZ="$1"; # Asigno la variable correspondiente ya que paso las validaciones. Historias Clinicas
                         fi
@@ -165,7 +169,7 @@ callSintaxError() {
             if [ $cantDias -lt $difDias ] ; then 
                 cd "$directoryHC";
                 tar -zcf "$key".tar.gz "$key"
-                cd -;
+                cd - > /dev/null;
                 mv -f "$directoryHC"/"$key".tar.gz "$fileZ"/"$key".tar.gz
                 rm -r "$directoryHC"/"$key" 
                 echo "$key - - - - - - - - Compresion correcta"
@@ -176,12 +180,16 @@ callSintaxError() {
         echo "Se han comprimido exitosamente: $cantidadComprimidos"
 
 #Descomprimimos si llega la acción.
-    elif [[ $action == "-d" ]]; then
+    elif [[ $action == "-d" ]] ; then
+        if [ ! -r "$fileZ"/"$nombrePacienteADescomprimir".tar.gz ]; then
+            echo "El archivo a descomprimir \""$fileZ"/"$nombrePacienteADescomprimir".tar.gz\" no existe.";
+            exit;
+        fi
         mv -f "$fileZ"/"$nombrePacienteADescomprimir".tar.gz "$directoryHC"
         cd "$directoryHC"
         tar -xzf "$nombrePacienteADescomprimir".tar.gz
         rm -r "$nombrePacienteADescomprimir".tar.gz
-        cd -;
+        cd - > /dev/null;
         echo "$nombrePacienteADescomprimir - - - - - - - - - - Descompresion correcta"
     fi
 
