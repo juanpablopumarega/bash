@@ -35,7 +35,7 @@ callSintaxError() {
                 display_help # Mostramos la ayuda sobre el call de la función.
     else
 
-        if [ $# -lt 4 ] || [ $# -gt 6 ]; then # Verifico si no cumple la cantidad minima de parametros requeridos
+        if [ $# -lt 2 ] || [ $# -gt 6 ]; then # Verifico si no cumple la cantidad minima de parametros requeridos
             callSintaxError
         fi
 
@@ -74,7 +74,7 @@ callSintaxError() {
                         if [ -z "$1" ] ; then
                             umbral=$(echo "-1");
                         else
-                            umbral="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
+                            umbral=$(expr $1 \* 1024); # Asigno la variable correspondiente ya que paso las validaciones.
                         fi
                     shift 
                     ;;
@@ -92,60 +92,49 @@ callSintaxError() {
 
 #Calculamos el umbral si no existe
     if [ -z $umbral ] || [[ $umbral == "-1" ]] ; then
-        umbral=$(find $directorioDeAnalisis -type f -ls | awk '{sum += $7; n++;} END {print int((sum/n)/1024);}');
+        umbral=$(find $directorioDeAnalisis -type f -ls | awk '{sum += $7; n++;} END {print int(sum/n);}');
     fi
-
-#Nombre del archivo de salidaq
-    outputFileName=$(echo resultado_$(date +"%Y-%m-%d_%H:%M:%S").out)
-
-#Impresiones por pantalla de ayuda, borrar antes de entregar.
-    echo "" 
-    echo "  EJECUTANDO EL SCRIPT: $0"
-    echo ""
-    echo "  1 - Nombre de archivo de salida:    "$outputFileName""
-    echo "  2 - Directorio a analizar:          "$directorioDeAnalisis""
-    echo "  3 - Directorio de Salida:           "$directorioSalida""
-    echo "  4 - Umbral:                         "$umbral"KB"
-    echo ""
 
 #Inicio el ciclo para detectar archivos duplicados
     declare -A array
 
-    #Genero un file temporal donde obtengo el listado de todos los files del directorio a analizar
-    filePivote="/tmp/APL1Ejercicio3_pivote.dat"
-    find $directorioDeAnalisis -type f -name "*" -ls | awk '{print$11}' > $filePivote
+#Genero un file temporal donde obtengo el listado de todos los files del directorio a analizar
+    filePivote="/tmp/APL1Ejercicio3_pivote.tmp"
+    find "$directorioDeAnalisis" -type f -name "*" -ls | awk '{print$11}' > $filePivote
 
-    echo ""
-
+#Itero el file pivote donde tengo el resultado del analisis realizado al directorio a analizar.
     for linea in $(cat $filePivote)
     do
         fileName=$(basename "$linea"); #Obtengo el nombre del file
         if [[ ! -z ${array[$fileName]} ]] ; then
-            array[$fileName]=1; #Si esta duplicado lo marcamos con el flag 1.
+            array["$fileName"]=1; #Si esta duplicado lo marcamos con el flag 1.
         else
-            array[$fileName]=0; #No dulicado flag 0.
+            array["$fileName"]=0; #No duplicado flag 0.
         fi
     done
 
+#Nombre del archivo de salidaq
+    outputFileName=$(echo resultado_$(date +"%Y-%m-%d_%H:%M:%S").out)
+
 # Muestro el nombre del file duplicado y realizo un find para obtener los detalles del mismo.
-    echo "ARCHIVO DUPLICADOS" >> $directorioSalida/$outputFileName;
+    echo "ARCHIVO DUPLICADOS" >> "$directorioSalida"/"$outputFileName";
     
     for key in "${!array[@]}"; 
     do 
         if [[ ${array[$key]} == 1 ]] ; then
-            echo "Filename: $key" >> $directorioSalida/$outputFileName;
-            find $directorioDeAnalisis -name $key -type f -ls | awk '{print$10,$11}' >> $directorioSalida/$outputFileName;
+            echo "Filename: $key" >> "$directorioSalida"/"$outputFileName";
+            find "$directorioDeAnalisis" -name $key -type f -ls | awk '{print$8,$9,$10,$11}' >> "$directorioSalida"/"$outputFileName";
         fi
     done   
 
 #Muestro los files que superen el umbral.
-    echo "" >> $directorioSalida/$outputFileName;
-    echo "ARCHIVOS QUE SUPEREN EL UMBRAL: $umbral    [ SIZE | FILE ]" >> $directorioSalida/$outputFileName;
-    echo "$(find $directorioDeAnalisis -type f -name "*" -size +"$umbral"k -ls | awk '{print $7,$11}' | sort -r)" >> $directorioSalida/$outputFileName;
+    echo "" >> "$directorioSalida"/"$outputFileName";
+    echo "ARCHIVOS QUE SUPEREN EL UMBRAL: $umbral   [ SIZE | FILE ]" >> "$directorioSalida"/"$outputFileName";
+    echo "$(find "$directorioDeAnalisis" -type f -name "*" -size +"$umbral"c -ls | awk '{print $7,$11}' | sort -r)" >> $directorioSalida/$outputFileName;
     echo ""
 
 # Muestro por pantalla el file resultante
-    cat $directorioSalida/$outputFileName;
+    cat "$directorioSalida"/"$outputFileName";
 
 # Elimino el file pivote
     rm $filePivote;
