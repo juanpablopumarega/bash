@@ -183,7 +183,6 @@ callSintaxError() {
         rm -r "$nombrePacienteADescomprimir".tar.gz
         cd -;
         echo "$nombrePacienteADescomprimir - - - - - - - - - - Descompresion correcta"
-        cd - > /dev/null
     fi
 
 #FIN
