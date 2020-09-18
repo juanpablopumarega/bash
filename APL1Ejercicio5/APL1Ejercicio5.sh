@@ -104,44 +104,33 @@ callSintaxError() {
     fi
 # FIN DE VALIDACION DE PARAMETROS
 
-
-#Nombre del archivo de salidaq
+#Nombre del archivo de salida
     outputFileName=$(echo accessibilityTEst_$(date +"%Y-%m-%d_%H:%M:%S").out)
 
-#Impresiones por pantalla de ayuda, borrar antes de entregar.
-    echo "" 
-    echo "  EJECUTANDO EL SCRIPT: $0"
-    echo ""
-    echo "  1 - File de Arias:                  "$fileAria""
-    echo "  2 - File de Tags:                   "$fileTags""
-    echo "  3 - File HTML a analizar:           "$fileHTML""
-    echo "  4 - File de Salida:                 "$outputFileDirectory/$outputFileName""
-    echo ""
+#Escribo en un archivo temporal el file html donde no haya coincidencia con las arias
+    fileHTMLtemp=$(echo /tmp/"$(basename "$fileHTML").tmp")
+    grep -vif "$fileAria" "$fileHTML" > "$fileHTMLtemp"
 
-    grep -vif "$fileAria" "$fileHTML" > "$fileHTML".tmp
-
-    #Creo el archivo de salida con ese encabezado
+#Creo el archivo de salida con ese encabezado
     echo "{" > "$outputFileDirectory/$outputFileName";
     echo -e '\t' "[" >> "$outputFileDirectory/$outputFileName";
 
-    #Contamos la cantidad de tags que analizamos
+#Contamos la cantidad de tags que analizamos
     cantidadTags=$(cat "$fileTags" | wc -w);
-
     cont=0;
 
-    #Iteramos el contador para saber cuando llegamos al limite de tag
-    #Interamos el file de tags procesando las coincidencias de todos los tags que llegan por archivo
+#Iteramos el contador para saber cuando llegamos al limite de tag
+#Interamos el file de tags procesando las coincidencias de todos los tags que llegan por archivo
     for word in $(cat "$fileTags") 
     do 
         (( cont++ ));
-        grep -n \<$word "$fileHTML".tmp | awk -f parseo.awk -v etiqueta=$word -v cantidadTags=$cantidadTags -v contadorTags=$cont>> "$outputFileDirectory/$outputFileName"
+        grep -n \<$word "$fileHTMLtemp" | awk -f parseo.awk -v etiqueta=$word -v cantidadTags=$cantidadTags -v contadorTags=$cont>> "$outputFileDirectory/$outputFileName"
     done;
 
     echo -e '\t' "]" >> "$outputFileDirectory/$outputFileName";
     echo "}" >> "$outputFileDirectory/$outputFileName";
 
     #Borrar los temporales.
-    rm "$fileHTML".tmp 
-
+    rm "$fileHTMLtemp"; 
 
 #FIN 
