@@ -132,17 +132,6 @@ callSintaxError() {
 
 # FIN DE VALIDACION DE PARAMETROS
 
-#Impresiones por pantalla de ayuda, borrar antes de entregar.
-    echo "" 
-    echo "  EJECUTANDO EL SCRIPT: $0"
-    echo ""
-    echo "  1 - La accion a realizar es                 "$action""
-    echo "  2 - Cantidad de dias antiguedad:            "$cantDias""
-    echo "  3 - Paciente a descomprimir:                "$nombrePacienteADescomprimir""
-    echo "  4 - File de historia clinica:               "$directoryHC/ultimasvisitas.txt""
-    echo "  5 - Directorio donde guardar comprimidos:   "$fileZ""
-    echo ""
-
 #Declaro el array a utilizar.
     declare -A ListadoPacientes
 
@@ -177,7 +166,9 @@ callSintaxError() {
                 cd "$directoryHC"
                 tar -zcf "$key".tar.gz "$key"
                 rm -r "$key"
-                mv -f "$key".tar.gz "$fileZ"/"$key"
+                cd ..
+
+                mv -f "$directoryHC"/"$key".tar.gz "$fileZ"/"$key".tar.gz
                 echo "$key - - - - - - - - Compresion correcta"
                 (( cantidadComprimidos++ ))
                 cd - > /dev/null
