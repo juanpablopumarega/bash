@@ -87,7 +87,7 @@ callSintaxError() {
     export outputFileName
     export archivoDeBlacklist
 # Se le da permisos de ejecucion al segundo script, y se lo ejecuta en segundo plano    
-    chmod +x "$PWD/depuradorBlacklist.sh"
-    ./depuradorBlacklist.sh &
+    chmod +x "$PWD/blacklistKiller.sh"
+    ./blacklistKiller.sh &
     
 #FIN   
