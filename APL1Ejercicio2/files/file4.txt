@@ -1,0 +1,8 @@
+Hola como estas todo bien?
+Esto es un archivo de prueba para ver si funcionan las Stop Words.
+Hola.
+Prueba
+archivo
+hola
+Stop
+esto sirve como prueba: holaa
