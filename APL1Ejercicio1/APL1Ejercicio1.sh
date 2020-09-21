@@ -1,4 +1,24 @@
+#####################################################################################################################
+# APL:              1                                                                                               #
+# Ejercicio:        1                                                                                               #
+# Entrega N°:       1                                                                                               #
+# Nombre Script:    APL1Ejercicio1.sh                                                                               #
+# Ejemplo de uso:                                                                                                   #
+# Grupo 2                                                                                                           #
+# Fernández Durante Cynthya Alexandra   DNI:48693815                                                                #
+# Lopez Pumarega Juan Pablo             DNI:34593023                                                                #
+# Miranda Andres                        DNI:32972232                                                                #
+# Paiva Gordillo Nahuel Alejo           DNI:38455227                                                                #
+# Salerti Natalia                       DNI:41559796                                                                #
+#####################################################################################################################
+
+
+
 #!/bin/bash 
+
+
+
+
 ErrorS() # (1) Función. Salida por pantalla de comentarios de como debe ser la sintaxis del script ejecutado.
 { 
     echo "Error. La sintaxis del script es la siguiente:"
