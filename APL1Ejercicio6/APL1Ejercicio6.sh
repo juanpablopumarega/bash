@@ -1,8 +1,8 @@
 #####################################################################################################################
 # APL:              1                                                                                               #
-# Ejercicio:        5                                                                                               #
+# Ejercicio:        6                                                                                               #
 # Entrega N°:       1                                                                                               #
-# Nombre Script:    APL1Ejercicio5.sh                                                                               #
+# Nombre Script:    APL1Ejercicio6.sh                                                                               #
 # Ejemplo de uso:   ./APL1Ejercicio6.sh -c -n "Numero" -hc "directorio analizar" -z "directorio comprimidos"        #
 # Grupo 2                                                                                                           #
 # Fernández Durante Cynthya Alexandra   DNI:48693815                                                                #
