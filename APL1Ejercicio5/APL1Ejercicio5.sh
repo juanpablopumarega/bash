@@ -125,7 +125,9 @@ callSintaxError() {
 
 #Escribo en un archivo temporal el file html donde no haya coincidencia con las arias
     fileHTMLtemp=$(echo /tmp/"$(basename "$fileHTML").tmp")
-    grep -vif "$fileAria" "$fileHTML" > "$fileHTMLtemp"
+    #grep -vif "$fileAria" "$fileHTML" > "$fileHTMLtemp"
+#Se deja el archivo temporal para no tocar nada del archivo original.
+    cat "$fileHTML" > "$fileHTMLtemp" 
 
 #Creo el archivo de salida con ese encabezado
     echo "{" > "$outputFileDirectory/$outputFileName";
