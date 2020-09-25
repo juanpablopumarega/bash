@@ -1,7 +1,7 @@
 ##################################################################################################################################################
 # APL:              1                                                                                                                            #
 # Ejercicio:        5                                                                                                                            #
-# Entrega N°:       1                                                                                                                            #
+# Entrega N°:       2                                                                                                                            #
 # Nombre Script:    APL1Ejercicio5.sh                                                                                                            #
 # Ejemplo de uso:   ./APL1Ejercicio5.sh --aria "archivo Aria" --tags "archivo etiqueas" --web "archivo Analizar" --out "directorio salida"       #
 # Grupo 2                                                                                                                                        #
@@ -123,12 +123,6 @@ callSintaxError() {
 #Nombre del archivo de salida
     outputFileName=$(echo accessibilityTEst_$(date +"%Y-%m-%d_%H:%M:%S").out)
 
-#Escribo en un archivo temporal el file html donde no haya coincidencia con las arias
-    fileHTMLtemp=$(echo /tmp/"$(basename "$fileHTML").tmp")
-    #grep -vif "$fileAria" "$fileHTML" > "$fileHTMLtemp"
-#Se deja el archivo temporal para no tocar nada del archivo original.
-    cat "$fileHTML" > "$fileHTMLtemp" 
-
 #Creo el archivo de salida con ese encabezado
     echo "{" > "$outputFileDirectory/$outputFileName";
     echo -e '\t' "[" >> "$outputFileDirectory/$outputFileName";
@@ -142,13 +136,10 @@ callSintaxError() {
     for word in $(cat "$fileTags") 
     do 
         (( cont++ ));
-        grep -n \<$word "$fileHTMLtemp" | awk -f parseo.awk -v etiqueta=$word -v cantidadTags=$cantidadTags -v contadorTags=$cont>> "$outputFileDirectory/$outputFileName"
+        grep -n \<$word "$fileHTML" | grep -vif "$fileAria" | awk -f parseo.awk -v etiqueta=$word -v cantidadTags=$cantidadTags -v contadorTags=$cont>> "$outputFileDirectory/$outputFileName"
     done;
 
     echo -e '\t' "]" >> "$outputFileDirectory/$outputFileName";
     echo "}" >> "$outputFileDirectory/$outputFileName";
-
-    #Borrar los temporales.
-    rm "$fileHTMLtemp"; 
 
 #FIN 
