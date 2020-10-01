@@ -121,7 +121,7 @@ callSintaxError() {
 # FIN DE VALIDACION DE PARAMETROS
 
 #Nombre del archivo de salida
-    outputFileName=$(echo accessibilityTEst_$(date +"%Y-%m-%d_%H:%M:%S").out)
+    outputFileName=$(echo accessibilityTest_$(date +"%Y-%m-%d_%H:%M:%S").out)
 
 #Creo el archivo de salida con ese encabezado
     echo "{" > "$outputFileDirectory/$outputFileName";
@@ -141,5 +141,18 @@ callSintaxError() {
 
     echo -e '\t' "]" >> "$outputFileDirectory/$outputFileName";
     echo "}" >> "$outputFileDirectory/$outputFileName";
+
+    #Lo siguiente se hace para obtener la cantidad de lineas a modificar y controlar que sea distinto de 0. Para saber que mensaje mostrar por pantalla. 
+    flag=$(grep "\"cantidad\":" "$outputFileDirectory/$outputFileName" | sed  's/,//g' | awk '{sum += $2;} END {print sum;}');
+
+    echo "El proceso ha llegado al final correctamente."
+
+    #Comparacion para saber que imprimir.
+    if [[ $flag -gt 0 ]] ; then 
+        echo "Se deben realizar cambios en el archivo, la cantidad de lineas a corregir son: $flag."
+    else 
+        echo "No se deben realizar cambios en el archivo."
+    fi
+
 
 #FIN 
