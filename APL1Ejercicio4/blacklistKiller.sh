@@ -2,12 +2,15 @@
 
 declare -a blackproc
     i=0;
+    cat 
     for proceso in $(cat "$archivoDeBlacklist" )
     do
         blackproc[i]="$proceso"
         ((i++))
     done
+    
 
+    
     while true;
     do    
         for i in "${!blackproc[@]}" 
@@ -20,7 +23,6 @@ declare -a blackproc
                 echo $fecha $killed_pids >> "$directorioSalida/$outputFileName" 
                 #para que no se vea en la terminal la salida de la pantalla.
                 killall $killed_pids 2> /dev/null 
-
             fi    
         done
     done

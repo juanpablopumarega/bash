@@ -45,6 +45,11 @@ callSintaxError() {
     exit 0;
 }
 
+errorFiles() {
+    echo "Error. El archivo $1 no es un archivo valido. "
+    exit 0;
+}
+
 # INICIO DE VALIDACION DE PARAMETROS
     if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
                 display_help # Mostramos la ayuda sobre el call de la función.
@@ -63,8 +68,8 @@ callSintaxError() {
                         if [ -z "$1" ] ; then
                                 emptyDirectory "Blacklist (-b)";
                         elif
-                            [ ! -r "$1" ] ; then
-                                parametersError "$1";
+                            [ ! -f "$1" -o ! -s "$1" ] ; then
+                                    errorFiles "$1";
                             else
                                 archivoDeBlacklist="$1"; # Asigno la variable correspondiente ya que paso las validaciones.
                         fi
@@ -95,7 +100,7 @@ callSintaxError() {
     fi
 # FIN DE VALIDACION DE PARAMETROS
 
-# Se debia crear el archivo que guarda los procesos del blacklist cerrados.
+ #Se debia crear el archivo que guarda los procesos del blacklist cerrados.
     outputFileName=$(echo blacklist_{$(date +"%Y-%m-%d_%H:%M:%S")}.out)
     touch "$directorioSalida/$outputFileName" && chmod +w "$directorioSalida/$outputFileName"
 
