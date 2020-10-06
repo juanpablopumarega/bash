@@ -1,7 +1,7 @@
 #####################################################################################################################
 # APL:              1                                                                                               #
 # Ejercicio:        4                                                                                               #
-# Entrega N°:       1                                                                                               #
+# Entrega N°:       2                                                                                               #
 # Nombre Script:    APL1Ejercicio4.sh                                                                               #
 # Ejemplo de uso:   ./APL1Ejercicio4.sh -b "archivo Blacklist" -o "directorio Salida"                               #
 # Grupo 2                                                                                                           #
