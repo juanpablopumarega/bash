@@ -1,19 +1,3 @@
-#####################################################################################################################
-# APL:              1                                                                                               #
-# Ejercicio:        4                                                                                               #
-# Entrega N°:       2                                                                                               #
-# Nombre Script:    APL1Ejercicio4.sh                                                                               #
-# Ejemplo de uso:   ./APL1Ejercicio4.sh -b "archivo Blacklist" -o "directorio Salida"                               #
-# Grupo 2                                                                                                           #
-# Fernández Durante Cynthya Alexandra   DNI:48693815                                                                #
-# Lopez Pumarega Juan Pablo             DNI:34593023                                                                #
-# Miranda Andres                        DNI:32972232                                                                #
-# Paiva Gordillo Nahuel Alejo           DNI:38455227                                                                #
-# Salerti Natalia                       DNI:41559796                                                                #
-#####################################################################################################################
-
-
-
 #!/bin/bash
 
 # Command line help
